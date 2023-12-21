@@ -6,7 +6,7 @@
           <div class="card-header position-relative">
             <div class="bg-holder d-none d-md-block bg-card z-index-1"
                  style="
-                          background-image: url(../assets/img/illustrations/bg-wave.png);
+                          background-image: url(../../assets/img/illustrations/bg-wave.png);
                           background-size: 230px;
                           background-position: right bottom;
                           z-index: -1;
@@ -15,106 +15,44 @@
             <!--/.bg-holder-->
             <div class="position-relative z-index-2">
               <div>
-                <h3 class="text-primary mb-1">سلام وقت بخیر</h3>
-                <p>خلاصه ای جزئیات حساب شما
-                </p>
+                <h3 class="text-primary mb-1">{{ accountOverview.message }}</h3>
+                <p> {{ accountOverview.info }} </p>
               </div>
-              <div class="d-flex py-3">
+              <div class="d-flex py-3" v-if="accountOverview.freelancer != null">
                 <div class="pe-3">
                   <p class="text-600 fs--1 fw-medium">شغل‌های فعال</p>
-                  <h4 class="text-800 mb-0">1</h4>
+                  <h4 class="text-800 mb-0">{{ accountOverview.freelancer.jobs }}</h4>
                 </div>
                 <div class="pe-3">
                   <p class="text-600 fs--1 fw-medium">پروپوزال‌های فعال</p>
-                  <h4 class="text-800 mb-0">6</h4>
+                  <h4 class="text-800 mb-0">{{ accountOverview.freelancer.proposals }}</h4>
                 </div>
                 <div class="ps-3">
-                  <p class="text-600 fs--1 fw-medium">موجودی (تومان)</p>
-                  <h4 class="text-800 mb-0">7,365,000</h4>
+                  <p class="text-600 fs--1 fw-medium">درآمد ماه جاری (تومان)</p>
+                  <h4 class="text-800 mb-0">{{ accountOverview.freelancer.income }}</h4>
                 </div>
               </div>
-              <div class="d-flex py-3">
+              <div class="d-flex py-3" v-if="accountOverview.client != null">
                 <div class="pe-3">
-                  <p class="text-600 fs--1 fw-medium">شغل‌های فعال</p>
-                  <h4 class="text-800 mb-0">1</h4>
+                  <p class="text-600 fs--1 fw-medium">قراردادهای فعال</p>
+                  <h4 class="text-800 mb-0">{{ accountOverview.client.contracts }}</h4>
                 </div>
                 <div class="pe-3">
-                  <p class="text-600 fs--1 fw-medium">پروپوزال‌های فعال</p>
-                  <h4 class="text-800 mb-0">6</h4>
+                  <p class="text-600 fs--1 fw-medium">پروپوزال‌های دریافتی</p>
+                  <h4 class="text-800 mb-0">{{ accountOverview.client.proposals }}</h4>
                 </div>
                 <div class="ps-3">
-                  <p class="text-600 fs--1 fw-medium">موجودی (تومان)</p>
-                  <h4 class="text-800 mb-0">7,365,000</h4>
+                  <p class="text-600 fs--1 fw-medium">پرداختی ماه جاری (تومان)</p>
+                  <h4 class="text-800 mb-0">{{ accountOverview.client.outcome }}</h4>
                 </div>
               </div>
             </div>
           </div>
           <div class="card-body p-0">
             <ul class="mb-0 list-unstyled">
-              <li class="alert mb-0 rounded-0 py-3 px-card alert-warning border-x-0 border-top-0">
-                <div class="row flex-between-center">
-                  <div class="col">
-                    <div class="d-flex">
-                      <div class="fas fa-circle mt-1 fs--2"></div>
-                      <p class="fs--1 ps-2 mb-0">
-                        <strong>9 پیام جدید</strong>
-                        پیام های خوانده نشده‌ای دارید.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-auto d-flex align-items-center">
-                    <a class="alert-link fs--1 fw-medium" href="#!"
-                    >نمایش پیام‌ها<i
-                        class="fas fa-chevron-left ms-1 fs--2"
-                    ></i
-                    ></a>
-                  </div>
-                </div>
-              </li>
-              <li class="alert mb-0 rounded-0 py-3 px-card greetings-item border-top border-x-0 border-top-0">
-                <div class="row flex-between-center">
-                  <div class="col">
-                    <div class="d-flex">
-                      <div
-                          class="fas fa-circle mt-1 fs--2 text-primary"
-                      ></div>
-                      <p class="fs--1 ps-2 mb-0">
-                        <strong>1 تاییدیه پرداخت</strong>
-                        درخواست انتقال پرداختی شما تایید شد.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-auto d-flex align-items-center">
-                    <a class="alert-link fs--1 fw-medium" href="#!"
-                    >نمایش پرداختی‌ها<i
-                        class="fas fa-chevron-left ms-1 fs--2"
-                    ></i
-                    ></a>
-                  </div>
-                </div>
-              </li>
-              <li class="alert mb-0 rounded-0 py-3 px-card greetings-item border-top border-0">
-                <div class="row flex-between-center">
-                  <div class="col">
-                    <div class="d-flex">
-                      <div
-                          class="fas fa-circle mt-1 fs--2 text-primary"
-                      ></div>
-                      <p class="fs--1 ps-2 mb-0">
-                        <strong>2 دعوتنامه جدید</strong>
-                        دعوتنامه جدیدی از سمت کارفرما برای شما ارسال شده است.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-auto d-flex align-items-center">
-                    <a class="alert-link fs--1 fw-medium" href="#!"
-                    >نمایش پروپوزال‌ها<i
-                        class="fas fa-chevron-left ms-1 fs--2"
-                    ></i
-                    ></a>
-                  </div>
-                </div>
-              </li>
+              <DashboardTinyNotification title="9 پیام جدید" text="پیام های خوانده نشده‌ای دارید." type="warning" link="/link" link-title="نمایش پیام‌ها" />
+              <DashboardTinyNotification title="2 دعوتنامه جدید" text="دعوتنامه جدیدی از سمت کارفرما برای شما ارسال شده است." type="info" link="/link" link-title="نمایش پروپوزال‌ها" />
+              <DashboardTinyNotification title="1 تاییدیه پرداخت" text="درخواست انتقال پرداختی شما تایید شد." type="simple" link="/link" link-title="نمایش پرداختی‌ها" />
             </ul>
           </div>
         </div>
@@ -124,10 +62,15 @@
 </template>
 
 <script>
+import DashboardTinyNotification from "@/components/dashboard/DashboardTinyNotification.vue";
+
 export default {
   name: "HomeDashboard",
+  components: {DashboardTinyNotification},
   props: {
-
+    accountOverview: {
+      type: Object
+    }
   }
 }
 </script>

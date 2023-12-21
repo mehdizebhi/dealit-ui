@@ -40,6 +40,33 @@
           </div>
           <div class="row g-lg-3">
             <div class="col-lg-8 order-1 order-lg-0">
+              <div class="card mb-3 bg-transparent border shadow-none">
+                <div class="card-body">
+                  <div class="row gy-4 text-center text-md-start">
+                    <div class="col-md-4">
+                      <img class="mb-3" src="../../assets/img/icons/target.svg" width="36" alt="">
+                      <h6 class="fs-0 text-primary">سطح متخصص</h6>
+                      <p class="fs--1 mb-0">
+                        لازم است در اسکیل های عنوان شده در این شغل، در سطح مورد انتظار باشید.
+                      </p>
+                    </div>
+                    <div class="col-md-4">
+                      <img class="mb-3" src="../../assets/img/icons/discount.svg" width="36" alt="">
+                      <h6 class="fs-0 text-primary">تضمین 30 ساعت در هفته</h6>
+                      <p class="fs--1 mb-0">
+                        لازم است تضمین کنید ساعات تعیین شده را پر خواهید کرد.
+                      </p>
+                    </div>
+                    <div class="col-md-4">
+                      <img class="mb-3" src="../../assets/img/icons/networking.svg" width="36" alt="">
+                      <h6 class="fs-0 text-primary">طول کمتر از یک ماه</h6>
+                      <p class="fs--1 mb-0">
+                        لازم است در مدت زمان طول پروژه در دسترس کارفرما باشید.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="card mb-3">
                 <div class="card-header bg-light">
                   <div class="d-flex flex-between-center">
@@ -187,7 +214,15 @@
                           <span class="ms-2 fs--1 text-700">کانکنشن موردنیاز</span>
                         </h2>
                         <p class="text-danger fs--1 fw-semi-bold">شما کانکشن کافی برای درخواست ندارید</p>
-                        <button class="btn btn-primary btn-lg w-100 fs-0 mt-1" id="course-purchase-btn">ارسال درخواست</button>
+
+                        <a href="#" class="btn btn-primary btn-lg w-100 fs-0 mt-1" id="course-purchase-btn">ارسال درخواست</a>
+<!--                        <SubmitJobModal>
+                          <template v-slot:activator="{ props }">
+                            <button v-bind="props" class="btn btn-primary btn-lg w-100 fs-0 my-2 mx-3" id="course-purchase-btn">ارسال درخواست</button>
+                          </template>
+                        </SubmitJobModal>-->
+
+
                         <p class="text-700 fw-medium fs--1 mt-3 mb-0">بازگشت کانکشن بعد از رد شدن یا حذف آگهی</p>
                       </div>
                       <div class="col-md-5 col-lg-12">
@@ -211,7 +246,9 @@
                     </div>
                   </div>
                 </div>
-                <div class="d-none d-xl-block position-absolute z-index--1 top-0 end-0 text-end me-n2 me-xxl-4 mt-xl-6"><img class="bg-card" src="" alt="" style="max-width: 23.75rem;" /></div>
+                <div class="d-none d-xl-block position-absolute z-index--1 top-0 end-0 text-end me-n2 me-xxl-4 mt-xl-6">
+                  <img class="bg-card" src="../../assets/img/illustrations/bg-wave.png" alt="" style="max-width: 23.75rem;" />
+                </div>
               </div>
             </div>
           </div>
@@ -235,6 +272,7 @@
 
 <script>
 import ContentLayout from "@/components/layouts/ContentLayout.vue";
+// import SubmitJobModal from "@/components/job/SubmitJobModal.vue";
 
 export default {
   name: "JobAdDetailsPage",

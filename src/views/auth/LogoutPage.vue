@@ -3,11 +3,13 @@
 </template>
   
 <script>
+import { logout } from '@/service/auth-service';
 export default {
   name: "LogoutPage",
   mounted() {
-    this.$cookies.remove("token");
-    this.$router.push('/');
+    logout();
+    this.$cookies.remove("access_token");
+    this.$router.push('/login');
   }
 };
 </script>

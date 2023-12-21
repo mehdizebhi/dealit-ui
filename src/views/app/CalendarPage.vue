@@ -66,7 +66,7 @@
 import ContentLayout from "@/components/layouts/ContentLayout.vue";
 
 export default {
-  name: "CalenderPage",
+  name: "CalendarPage",
   components: {ContentLayout}
 }
 </script>

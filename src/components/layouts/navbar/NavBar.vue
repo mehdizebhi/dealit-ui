@@ -1,6 +1,6 @@
 <template>
   <!-- Top Navbar Start -->
-  <TopNavBar />
+  <TopNavBar :account-info="accountInfo" />
   <!-- Top Navbar End -->
 </template>
 
@@ -9,6 +9,13 @@ import TopNavBar from "./TopNavBar.vue";
 
 export default {
   name: "NavBar",
+  props: {
+    accountInfo: {
+      type: Object,
+      required: false,
+      default: () => {}
+    }
+  },
   components: {
     TopNavBar
   },

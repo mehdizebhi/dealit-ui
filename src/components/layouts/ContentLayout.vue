@@ -1,8 +1,17 @@
 <template>
   <div class="content">
     <!--Start NavBar Layout-->
-    <NavBar />
+    <NavBar :account-info="accountInfo" />
     <!--End NavBar Layout-->
+
+    <!--Start Alert Layout-->
+    <AlertComponent v-for="(alert, i) in alerts"
+                    :key="'alert-' + i.toString()"
+                    :type="alert.type"
+                    :text="alert.text"
+                    :closable="alert.closable"
+    />
+    <!--End Alert Layout-->
 
     <!--Start Content Divs-->
     <slot name="content"></slot>
@@ -17,15 +26,25 @@
   <script>
 import FooterLayout from "../layouts/FooterLayout.vue";
 import NavBar from "@/components/layouts/navbar/NavBar.vue";
+import AlertComponent from "@/components/base/AlertComponent.vue";
 
 export default {
   name: "ContentLayout",
   components: {
+    AlertComponent,
     NavBar,
     FooterLayout,
   },
+  props: {
+    accountInfo: {
+      type: Object,
+      required: false
+    }
+  },
   data() {
-    return {};
+    return {
+      alerts: []
+    };
   },
   methods: {},
   mounted() {},

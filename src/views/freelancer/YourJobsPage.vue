@@ -2,128 +2,16 @@
   <!-- ===============================================-->
   <!--    Main Content-->
   <!-- ===============================================-->
-  <main class="main" id="top">
+  <main id="top" class="main">
     <div class="container" data-layout="container">
       <!--Start Content Layout-->
       <ContentLayout>
         <template #content>
-
-          <div class="card mb-3">
-            <div class="card-header">
-              <h5 class="mb-0">شغل‌ها (قراردادهای فعال)</h5>
-            </div>
-            <div class="card-body bg-light">
-
-              <div id="tableExample3" data-list='{"valueNames":["title","hired","type", "date", "status"],"page":5,"pagination":true}'>
-                <div class="row justify-content-end g-0">
-                  <div class="col-auto col-sm-5 mb-3">
-                    <form>
-                      <div class="input-group"><input class="form-control form-control-sm shadow-none search" type="search" placeholder="جستوجو..." aria-label="search" />
-                        <div class="input-group-text bg-transparent"><span class="fa fa-search fs--1 text-600"></span></div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                <div class="table-responsive scrollbar">
-                  <table class="table table-striped fs--1 mb-0">
-                    <thead class="bg-200 text-900">
-                    <tr>
-                      <th class="sort" data-sort="title">عنوان</th>
-                      <th class="sort" data-sort="hired">استخدام توسط</th>
-                      <th class="sort" data-sort="type">نوع پرداختی</th>
-                      <th class="sort" data-sort="date">تاریخ</th>
-                      <th class="sort" data-sort="status">وضعیت</th>
-                      <th>عملیات</th>
-                    </tr>
-                    </thead>
-                    <tbody class="list">
-                    <tr>
-                      <td class="title">
-                        <a href=""> برنامه نویس جاوا با تجربه در حوزه بانکی</a>
-                      </td>
-                      <td class="hired">شرکت نرم افزاری</td>
-                      <td class="type">200 هزارتومن / ساعتی</td>
-                      <td class="date">14 تیر تا الان</td>
-                      <td class="status">فعال</td>
-                      <td>18</td>
-                    </tr>
-                    <tr>
-                      <td class="title">
-                        <a href=""> برنامه نویس جاوا با تجربه در حوزه بانکی</a>
-                      </td>
-                      <td class="hired">شرکت نرم افزاری</td>
-                      <td class="type">200 هزارتومن / ساعتی</td>
-                      <td class="date">14 تیر تا الان</td>
-                      <td class="status">فعال</td>
-                      <td>18</td>
-                    </tr>
-                    <tr>
-                      <td class="title">
-                        <a href=""> برنامه نویس جاوا با تجربه در حوزه بانکی</a>
-                      </td>
-                      <td class="hired">شرکت نرم افزاری</td>
-                      <td class="type">200 هزارتومن / ساعتی</td>
-                      <td class="date">14 تیر تا الان</td>
-                      <td class="status">فعال</td>
-                      <td>18</td>
-                    </tr>
-                    <tr>
-                      <td class="title">
-                        <a href=""> برنامه نویس جاوا با تجربه در حوزه بانکی</a>
-                      </td>
-                      <td class="hired">شرکت نرم افزاری</td>
-                      <td class="type">200 هزارتومن / ساعتی</td>
-                      <td class="date">14 تیر تا الان</td>
-                      <td class="status">فعال</td>
-                      <td>18</td>
-                    </tr>
-                    <tr>
-                      <td class="title">
-                        <a href=""> برنامه نویس جاوا با تجربه در حوزه بانکی</a>
-                      </td>
-                      <td class="hired">شرکت نرم افزاری</td>
-                      <td class="type">200 هزارتومن / ساعتی</td>
-                      <td class="date">14 تیر تا الان</td>
-                      <td class="status">فعال</td>
-                      <td>18</td>
-                    </tr>
-                    <tr>
-                      <td class="title">
-                        <a href=""> برنامه نویس جاوا با تجربه در حوزه بانکی</a>
-                      </td>
-                      <td class="hired">شرکت نرم افزاری</td>
-                      <td class="type">200 هزارتومن / ساعتی</td>
-                      <td class="date">14 تیر تا الان</td>
-                      <td class="status">فعال</td>
-                      <td>18</td>
-                    </tr>
-                    <tr>
-                      <td class="title">
-                        <a href=""> برنامه نویس جاوا با تجربه در حوزه بانکی</a>
-                      </td>
-                      <td class="hired">شرکت نرم افزاری</td>
-                      <td class="type">200 هزارتومن / ساعتی</td>
-                      <td class="date">14 تیر تا الان</td>
-                      <td class="status">فعال</td>
-                      <td>18</td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="d-flex justify-content-center mt-3">
-                  <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev">
-                    <span class="fas fa-chevron-right"></span>
-                  </button>
-                  <ul class="pagination mb-0"></ul>
-                  <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next">
-                    <span class="fas fa-chevron-left"> </span>
-                  </button>
-                </div>
-              </div>
-
+          <div class="row g-3 mb-3">
+            <div class="col-12 order-xxl-3">
+              <DataTableComponent title="شغل‌های شما (قراردادهای فعال)" :page="1" :length="5" id-tag="jobs" :rows="rows" :headers="headers" />
             </div>
           </div>
-
         </template>
       </ContentLayout>
       <!--End Content Layout-->
@@ -136,10 +24,131 @@
 
 <script>
 import ContentLayout from "@/components/layouts/ContentLayout.vue";
+import DataTableComponent from "@/components/table/DataTableComponent.vue";
 
 export default {
   name: "YourJobsPage",
-  components: {ContentLayout}
+  components: {
+    DataTableComponent,
+    ContentLayout,
+  },
+  data() {
+    return {
+      page: 1,
+      search: '',
+      itemsPerPage: 5,
+      headers: [
+        {title: 'عنوان شغل', key: 'jobTitle', sort: true},
+        {title: 'نوع پرداختی', key: 'type', sort: true},
+        {title: 'شروع', key: 'startAt', sort: true},
+        {title: 'پایان', key: 'endAt', sort: true},
+        {title: 'وضعیت', key: 'status', sort: false},
+      ],
+      rows: [
+        {
+          jobTitle: `<td>
+                          <div class="d-flex align-items-center position-relative">
+                            <div class="flex-1 ms-3">
+                              <h6 class="mb-0 fw-semi-bold">
+                                <a class="stretched-link text-900" href="../pages/user/profile.html">
+                                  توسعه سامانه بانکی
+                                </a></h6>
+                              <p class="text-500 fs--2 mb-0">استخدام توسط: دیجی پی</p>
+                            </div>
+                          </div>
+                        </td>`,
+          type: `<td class="align-middle">
+                          <p class="fs--1 mb-0 fw-semi-bold">200 هزارتومان ساعتی</p>
+                        </td>`,
+          startAt: `<td class="align-middle text-center time">
+                          <p class="fs--1 mb-0 fw-semi-bold">11 تیر 1402</p>
+                        </td>`,
+          endAt: `<td class="align-middle text-center date">
+                          <p class="fs--1 mb-0 fw-semi-bold">1 آذر 1402</p>
+                        </td>`,
+          status: `<td class="align-middle text-center">
+                          <span class="badge badge rounded-pill fw-medium fs--2 badge-soft-success">فعال</span>
+                        </td>`,
+        },
+        {
+          jobTitle: `<td>
+                          <div class="d-flex align-items-center position-relative">
+                            <div class="flex-1 ms-3">
+                              <h6 class="mb-0 fw-semi-bold">
+                                <a class="stretched-link text-900" href="../pages/user/profile.html">
+                                  دیلیت کمپانی
+                                </a></h6>
+                              <p class="text-500 fs--2 mb-0">استخدام توسط: دیجی پی</p>
+                            </div>
+                          </div>
+                        </td>`,
+          type: `<td class="align-middle">
+                          <p class="fs--1 mb-0 fw-semi-bold">200 هزارتومان ساعتی</p>
+                        </td>`,
+          startAt: `<td class="align-middle text-center time">
+                          <p class="fs--1 mb-0 fw-semi-bold">11 تیر 1402</p>
+                        </td>`,
+          endAt: `<td class="align-middle text-center date">
+                          <p class="fs--1 mb-0 fw-semi-bold">1 آذر 1402</p>
+                        </td>`,
+          status: `<td class="align-middle text-center">
+                          <span class="badge badge rounded-pill fw-medium fs--2 badge-soft-success">فعال</span>
+                        </td>`,
+        },
+        {
+          jobTitle: `<td>
+                          <div class="d-flex align-items-center position-relative">
+                            <div class="flex-1 ms-3">
+                              <h6 class="mb-0 fw-semi-bold">
+                                <a class="stretched-link text-900" href="../pages/user/profile.html">
+                                  شرکت نوآوران
+                                </a></h6>
+                              <p class="text-500 fs--2 mb-0">استخدام توسط: نوآوران</p>
+                            </div>
+                          </div>
+                        </td>`,
+          type: `<td class="align-middle">
+                          <p class="fs--1 mb-0 fw-semi-bold">200 هزارتومان ساعتی</p>
+                        </td>`,
+          startAt: `<td class="align-middle text-center time">
+                          <p class="fs--1 mb-0 fw-semi-bold">11 تیر 1402</p>
+                        </td>`,
+          endAt: `<td class="align-middle text-center date">
+                          <p class="fs--1 mb-0 fw-semi-bold">1 آذر 1402</p>
+                        </td>`,
+          status: `<td class="align-middle text-center">
+                          <span class="badge badge rounded-pill fw-medium fs--2 badge-soft-success">فعال</span>
+                        </td>`,
+        },
+        {
+          jobTitle: `<td>
+                          <div class="d-flex align-items-center position-relative">
+                            <div class="flex-1 ms-3">
+                              <h6 class="mb-0 fw-semi-bold">
+                                <a class="stretched-link text-900" href="../pages/user/profile.html">
+                                  توسعه سامانه بانکی
+                                </a></h6>
+                              <p class="text-500 fs--2 mb-0">استخدام توسط: دیجی پی</p>
+                            </div>
+                          </div>
+                        </td>`,
+          type: `<td class="align-middle">
+                          <p class="fs--1 mb-0 fw-semi-bold">200 هزارتومان ساعتی</p>
+                        </td>`,
+          startAt: `<td class="align-middle text-center time">
+                          <p class="fs--1 mb-0 fw-semi-bold">11 تیر 1402</p>
+                        </td>`,
+          endAt: `<td class="align-middle text-center date">
+                          <p class="fs--1 mb-0 fw-semi-bold">1 آذر 1402</p>
+                        </td>`,
+          status: `<td class="align-middle text-center">
+                          <span class="badge badge rounded-pill fw-medium fs--2 badge-soft-success">فعال</span>
+                        </td>`,
+        }
+      ],
+
+    };
+  },
 }
 </script>
 

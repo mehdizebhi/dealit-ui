@@ -17,7 +17,7 @@
                                                                  src="../../assets/img/generic/2.jpg" width="200"
                                                                  alt=""></div>
             </div>
-            <div class="card-body">
+            <div class="card-body mt-12">
               <div class="row">
                 <div class="col-lg-8">
                   <h4 class="mb-1"> مهدی ذبحی<span data-bs-toggle="tooltip" data-bs-placement="right"
