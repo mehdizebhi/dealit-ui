@@ -1,5 +1,4 @@
 import dealitApi from "@/api/dealit-api";
-
 import {getCookie} from "@/util/cookie-helper";
 
 export function getOverview() {

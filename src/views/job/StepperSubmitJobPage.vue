@@ -7,7 +7,9 @@
       <!--Start Content Layout-->
       <ContentLayout>
         <template #content>
-          <div class="card p-0">
+        <ProposalSubmitWizardForm />
+
+<!--          <div class="card p-0">
             <v-stepper :model-value="activeStep" style="background: transparent;">
               <div class="card-body bg-light p-0">
                 <v-stepper-header class="selector noshadow border-2 border-bottom scrollbar">
@@ -163,7 +165,7 @@
                                               :milestone-stage="String(index + 1)"
                                               @delete="handleDeleteMilestone(milestone)"/>
                           <button class="btn btn-falcon-default btn-sm mb-2 mx-4" type="button" @click="addNewMilestone">
-                    <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1">
+                    <span class="fas fa-plus fs&#45;&#45;2 me-1" data-fa-transform="up-1">
                     </span>اضافه کردن مرحله
                           </button>
                         </div>
@@ -258,18 +260,17 @@
                     </button>
                   </div>
                 </footer>
-<!--                <v-stepper-actions
+&lt;!&ndash;                <v-stepper-actions
                     :disable="disable"
                     @click:prev="activeStep -= 1"
                     @click:next="activeStep += 1"
                 >
-                </v-stepper-actions>-->
+                </v-stepper-actions>&ndash;&gt;
               </div>
             </v-stepper>
 
-          </div>
-
-          <v-snackbar v-model="snackbar" :timeout="5000">
+          </div>-->
+<!--          <v-snackbar v-model="snackbar" :timeout="5000">
             {{ snackbarText }}
             <template v-slot:actions>
               <v-btn
@@ -280,7 +281,7 @@
                 بستن
               </v-btn>
             </template>
-          </v-snackbar>
+          </v-snackbar>-->
         </template>
       </ContentLayout>
       <!--End Content Layout-->
@@ -292,11 +293,12 @@
 </template>
 <script>
 import ContentLayout from "@/components/layouts/ContentLayout.vue";
-import MilestoneInputCard from "@/components/job/MilestoneInputCard.vue";
+// import MilestoneInputCard from "@/components/job/MilestoneInputCard.vue";
+import ProposalSubmitWizardForm from "@/components/form/ProposalSubmitWizardForm.vue";
 
 export default {
   name: "StepperSubmitJobPage",
-  components: {MilestoneInputCard, ContentLayout},
+  components: {ProposalSubmitWizardForm, ContentLayout},
   data() {
     return {
       activeStep: 1,

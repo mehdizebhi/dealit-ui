@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import {getAccountInfo} from "@/service/account-service";
-
 export default {
   name: "App",
   data() {
@@ -13,13 +11,11 @@ export default {
       accountInfo: null
     };
   },
+  methods: {
+  },
+  created() {
+  },
   mounted() {
-    this.token = this.$cookies.get("token");
-    getAccountInfo().then((info) => {
-      this.accountInfo = info;
-    }).catch(() => {
-      console.log("Can not get Accounts Type for Nav Bar")
-    });
   },
 };
 </script>

@@ -23,7 +23,8 @@
     "vue-router": "^4.0.3",
     "vue3-persian-datetime-picker": "^1.2.2",
     "vuelidate": "^0.7.7",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vuex-extensions": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

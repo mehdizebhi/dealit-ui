@@ -70,8 +70,15 @@
                   <p class="mb-0 fs--1 text-800">کانکشن موردنیاز: 16</p>
                 </div>
                 <div class="mt-3 d-flex flex-lg-column gap-2">
-
-                  <v-btn prepend-icon="mdi-heart-outline" variant="tonal">
+                  <button class="btn btn-md btn-primary fs--1">
+                    <span class="far fa-eye"></span>
+                    <span class="ms-1 d-none d-lg-inline">نمایش آگهی</span>
+                  </button>
+                  <button class="btn btn-md btn-falcon-default hover-danger fs--1 text-600">
+                    <span class="far fa-heart"></span>
+                    <span class="ms-1 text-600 d-none d-lg-inline">ذخیره آگهی</span>
+                  </button>
+<!--                  <v-btn prepend-icon="mdi-heart-outline" variant="tonal">
                     <template v-slot:prepend>
                       <v-icon color="red-lighten-1"></v-icon>
                     </template>
@@ -79,7 +86,7 @@
                   </v-btn>
                   <v-btn prepend-icon="mdi-eye-outline" color="blue-darken-2" variant="tonal">
                     <span class="ms-1 d-sm-none d-md-flex d-none d-sm-flex">نمایش آگهی</span>
-                  </v-btn>
+                  </v-btn>-->
 
 <!--                  <button class="btn btn-md btn-falcon-default hover-danger fs&#45;&#45;1 text-600"><span-->
 <!--                      class="far fa-heart"></span><span-->

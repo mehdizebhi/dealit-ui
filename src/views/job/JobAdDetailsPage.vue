@@ -255,7 +255,7 @@
           <div class="card rounded-0 bottom-bar d-lg-none" data-bottom-bar='{"target":"course-purchase-btn","offsetTop":60,"breakPoint":"lg"}'>
             <div class="card-body py-2">
               <div class="d-flex gap-3 flex-between-center">
-                <h2 class="mb-0 fw-medium d-flex align-items-center">$47.49<del class="d-none d-sm-block ms-2 fs--1 text-500">$69.99</del></h2><button class="btn btn-primary btn-lg fs-0 flex-1">Purchase this course</button>
+                <h2 class="mb-0 fw-medium d-flex align-items-center">16 کانکت</h2><button class="btn btn-primary btn-lg fs-0 flex-1">ارسال درخواست</button>
               </div>
             </div>
           </div>

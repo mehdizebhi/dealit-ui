@@ -14,12 +14,12 @@
                   <div class="card-body">
                     <div class="row g-3 align-items-center">
                       <div class="col-md-6 col-lg-12 text-center">
-                        <img class="img-fluid rounded-3" src="https://dealit.s3.ir-thr-at1.arvanstorage.com/user.png" alt="" />
+                        <img class="img-fluid rounded-3" :src="pictureHref" alt="" />
                       </div>
                       <div class="col-md-6 col-lg-12">
                         <div class="row row-cols-1 g-0">
                           <div class="col text-center">
-                            <h4>مهدی ذبحی</h4>
+                            <h4>{{displayName}}</h4>
                           </div>
                           <div class="nav col mt-4 mt-md-5 mt-lg-4 order-md-1 order-lg-0">
                             <a v-for="(nav, i) in tabs" :id="nav.activator.id" :key="'nav-' + i.toString()"
@@ -43,15 +43,15 @@
                      :class="{'show': nav.active, 'active': nav.active}"
                      class="tab-pane fade" role="tabpanel">
 
-                  <div v-show="nav.pane.id === 'info-tab'">
+                  <div v-if="nav.pane.id === 'info-tab'">
                     <div class="card mb-4">
                       <div class="card-body">
                         <div class="row flex-between-center">
                           <form class="needs-validation" @submit.prevent="" novalidate="">
                             <div class="mb-3">
-                              <label class="form-label" for="username">نام کاربری</label>
+                              <label class="form-label" for="setting-username">نام کاربری</label>
                               <div class="input-group">
-                                <input :disabled="!editUsername" dir="ltr" id="username" value="mehdizebhi"  autocomplete="on" placeholder="نام کاربری برای هر کاربر متفاوت است" pattern="^[a-zA-Z][a-zA-Z0-9_]{4,}$" class="form-control" type="text" required=""/>
+                                <input :disabled="!editUsername" :value="username" id="setting-username" pattern="^[a-zA-Z][a-zA-Z0-9_]{4,}$" class="form-control" type="text" required=""/>
                                 <button @click="editUsername = true" v-show="!editUsername" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
@@ -65,9 +65,9 @@
                               <div class="invalid-feedback">نام کاربری باید حداقل 5 کاراکتر باشد و ترکیبی از حروف انگلیسی، اعداد و _ باشد</div>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label" for="display-name">نام نمایشی</label>
+                              <label class="form-label" for="setting-display-name">نام نمایشی</label>
                               <div class="input-group">
-                                <input :disabled="!editDisplayName" id="display-name" v-model="displayName" placeholder="از این نام برای نمایش به کاربران دیگر استفاده می شود" autocomplete="on" class="form-control" type="text" required=""/>
+                                <input :disabled="!editDisplayName" :value="displayName" id="setting-display-name" class="form-control" type="text" required=""/>
                                 <button @click="editDisplayName = true" v-show="!editDisplayName" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
@@ -91,19 +91,19 @@
                         <div class="row flex-between-center">
                           <form class="needs-validation" @submit.prevent="" novalidate="">
                             <div class="mb-3">
-                              <label class="form-label" for="email">
+                              <label class="form-label" for="setting-email">
                                 ایمیل
                                 <span class="badge rounded-pill badge-soft-success me-2">
                                   <span>تایید شده</span>
-                                  <span class="fas fa-check ms-1" data-fa-transform="shrink-4"></span>
+                                  <span class="fas fa-check ms-1"></span>
                                 </span>
                                 <span class="badge rounded-pill badge-soft-warning me-2">
                                   <span>تایید نشده</span>
-                                  <span class="fas fa-exclamation-triangle ms-1" data-fa-transform="shrink-4"></span>
+                                  <span class="fas fa-exclamation-triangle ms-1"></span>
                                 </span>
                               </label>
                               <div class="input-group">
-                                <input :disabled="!editEmail" dir="ltr" id="email" v-model="email" placeholder="example@email.com" autocomplete="on" class="form-control" type="email" required=""/>
+                                <input :disabled="!editEmail" :value="email" dir="ltr" id="setting-email" class="form-control" type="email" required=""/>
                                 <button @click="editEmail = true" v-show="!editEmail" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
@@ -127,19 +127,19 @@
                         <div class="row flex-between-center">
                           <form class="needs-validation" @submit.prevent="" novalidate="">
                             <div class="mb-3">
-                              <label class="form-label" for="phoneNumber">
+                              <label class="form-label" for="setting-phone-number">
                                 تلفن همراه
                                 <span class="badge rounded-pill badge-soft-success me-2">
                                   <span>تایید شده</span>
-                                  <span class="fas fa-check ms-1" data-fa-transform="shrink-4"></span>
+                                  <span class="fas fa-check ms-1"></span>
                                 </span>
                                 <span class="badge rounded-pill badge-soft-warning me-2">
                                   <span>تایید نشده</span>
-                                  <span class="fas fa-exclamation-triangle ms-1" data-fa-transform="shrink-4"></span>
+                                  <span class="fas fa-exclamation-triangle ms-1"></span>
                                 </span>
                               </label>
                               <div class="input-group">
-                                <input :disabled="!editPhone" dir="ltr" id="phoneNumber" v-model="phoneNumber" pattern="^09\d{9}$" placeholder="09123456789" autocomplete="on" class="form-control" type="tel" required=""/>
+                                <input :disabled="!editPhone" :value="phoneNumber" dir="ltr" id="setting-phone-number" pattern="^09\d{9}$" class="form-control" type="tel" required=""/>
                                 <button @click="editPhone = true" v-show="!editPhone" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
@@ -153,7 +153,6 @@
                               <div class="invalid-feedback">تلفن همراه نامعتبر است</div>
                             </div>
                             <div class="mb-1">
-
                             </div>
                           </form>
                         </div>
@@ -167,19 +166,23 @@
                         <div class="row flex-between-center">
                           <form class="needs-validation" @submit.prevent="" novalidate="">
                             <div class="mb-3">
-                              <label class="form-label" for="password">رمز عبور جاری</label>
-                              <input dir="ltr" id="password" v-model="password" pattern="^.{6,}$" autocomplete="on" class="form-control" type="password" required=""/>
+                              <label class="form-label" for="setting-old-password">رمز عبور جاری</label>
+                              <input dir="ltr" id="setting-old-password" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
                               <div class="invalid-feedback">رمز عبور نامعتبر است</div>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label" for="password">رمز عبور جدید</label>
-                              <input dir="ltr" id="password" v-model="password" pattern="^.{6,}$" autocomplete="on" class="form-control" type="password" required=""/>
+                              <label class="form-label" for="setting-new-password">رمز عبور جدید</label>
+                              <input dir="ltr" id="setting-new-password" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
                               <div class="invalid-feedback">رمز عبور نامعتبر است</div>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label" for="password">تکرار رمز عبور جدید</label>
-                              <input dir="ltr" id="password" v-model="password" pattern="^.{6,}$" autocomplete="on" class="form-control" type="password" required=""/>
+                              <label class="form-label" for="setting-confirm-new-password">تکرار رمز عبور جدید</label>
+                              <input dir="ltr" id="setting-confirm-new-password" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
                               <div class="invalid-feedback">رمز عبور نامعتبر است</div>
+                            </div>
+                            <div class="form-check mb-4">
+                              <input class="form-check-input" id="show-password" type="checkbox" v-model="showPassword" />
+                              <label class="form-check-label" for="show-password">نمایش رمز عبور</label>
                             </div>
                             <div class="mb-1">
                               <button class="btn btn-primary d-block w-100 mt-5 text-light" type="submit" name="submit">ویرایش رمز عبور</button>
@@ -190,7 +193,7 @@
                     </div>
                   </div>
 
-                  <div v-show="nav.pane.id === 'payment-tab'">
+                  <div v-if="nav.pane.id === 'payment-tab'">
                     <div class="alert alert-warning" role="alert">شما حساب بانکی اضافه نکردید. لطفا حساب بانکی خود را از قسمت زیر اضافه و تایید کنید.</div>
                     <div class="row g-3 mb-3">
                       <div v-show="!editCard" class="col-12">
@@ -265,13 +268,13 @@
                               <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label" for="display-name">شماره کارت</label>
-                              <input dir="ltr" id="display-name" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                              <label class="form-label" for="setting-card-number">شماره کارت</label>
+                              <input dir="ltr" id="setting-card-number" placeholder="" pattern="" class="form-control" type="text" required=""/>
                               <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                             </div>
                             <div class="mb-3">
-                              <label class="form-label" for="display-name">تاریخ انقضا</label>
-                              <input dir="ltr" id="display-name" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                              <label class="form-label" for="setting-card-expired">تاریخ انقضا</label>
+                              <input dir="ltr" id="setting-card-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
                               <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                             </div>
                             <div class="mb-1">
@@ -284,7 +287,7 @@
                     </div>
                   </div>
 
-                  <div v-show="nav.pane.id === 'privacy-tab'">
+                  <div v-if="nav.pane.id === 'privacy-tab'">
                     <div class="card bg-soft-danger mb-4">
                       <div class="card-body">
                         <div class="row flex-between-center">
@@ -303,7 +306,7 @@
                     </div>
                   </div>
 
-                  <div v-show="nav.pane.id === 'notification-tab'">
+                  <div v-if="nav.pane.id === 'notification-tab'">
                     <div class="card mb-3">
                       <div class="card-body">
                         <div class="row flex-between-center px-2 mx-1">
@@ -373,7 +376,7 @@
                     </div>
                   </div>
 
-                  <div v-show="nav.pane.id === 'subscription-tab'">
+                  <div v-if="nav.pane.id === 'subscription-tab'">
                     <div class="card mb-4">
                       <div class="card-header d-flex flex-between-center">
                         <h5 class="mb-0">وضعیت اشتراک</h5>
@@ -472,6 +475,7 @@
 
 <script>
 import ContentLayout from "@/components/layouts/ContentLayout.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SettingPage",
@@ -492,7 +496,22 @@ export default {
       editEmail: false,
       editPhone: false,
       editCard: false,
+      showPassword: false,
+      passwordType: "password",
+      newUsername: "",
     };
+  },
+  watch: {
+    showPassword(value){
+      if (value) {
+        this.passwordType = "text";
+      } else {
+        this.passwordType = "password";
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(["username", "displayName", "pictureHref", "email", "phoneNumber"]),
   },
 }
 </script>

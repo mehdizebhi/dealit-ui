@@ -1,8 +1,9 @@
-import { createStore } from 'vuex';
+import { Store } from 'vuex';
+import { createStore } from 'vuex-extensions';
 import user from './modules/user';
 
 // Create a new store instance.
-const store = createStore({
+const store = createStore(Store,{
     state () {
         return {
             loading: false

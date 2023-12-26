@@ -12,3 +12,7 @@ export function getCookie(name) {
     }
     return null; // Return null if the cookie doesn't exist
 }
+
+export function getAccessTokenCookie() {
+    return getCookie("access_token");
+}

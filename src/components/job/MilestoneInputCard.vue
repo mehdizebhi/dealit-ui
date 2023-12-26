@@ -1,5 +1,5 @@
 <template>
-  <div class="border-5 border-start position-relative p-3 mb-6">
+  <div class="border-5 bg-light rounded border-start position-relative p-3 mb-6">
     <div class="position-absolute end-0 top-0 mt-2 me-3 z-index-1">
       <button class="btn btn-link btn-sm p-0" type="button" @click="$emit('delete')">
         <span class="fas fa-times-circle text-danger" data-fa-transform="shrink-1"></span>
@@ -8,14 +8,10 @@
     <div class="row gx-2">
       <h6>مرحله {{milestoneStage}}</h6>
       <div class="col-12 mb-3">
-        <v-text-field
-            density="compact"
-            label="توضیحات مختصر"
-            model-value=""
-            placeholder="شرح کوتاه از کاری که در این مرحله قرار است انجام شود"
-            type="text"
-            variant="outlined">
-        </v-text-field>
+        <div class="mb-3">
+          <label class="form-label" :for="'stage-description-' + milestoneStage">توضیحات مختصر:</label>
+          <input :id="'stage-description-' + milestoneStage" class="form-control" type="text" placeholder="شرح کوتاه از کاری که در این مرحله قرار است انجام شود" />
+        </div>
       </div>
       <div class="col-12 col-md-6 mb-3">
         <v-menu
@@ -23,16 +19,12 @@
             transition="scale-transition"
         >
           <template v-slot:activator="{ props }">
-            <v-text-field
-                v-model="startDateText"
-                density="compact"
-                label="تاریخ شروع"
-                placeholder="لطفا تاریخ شروع این مرحله را وارد کنید"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="props"
-                variant="outlined"
-            ></v-text-field>
+            <div class="input-group mb-3">
+              <span class="input-group-text">
+                <span class="far fa-calendar-alt"></span>
+              </span>
+              <input :id="'start-date-' + milestoneStage" v-model="startDateText" v-bind="props" class="form-control" type="text" placeholder="تاریخ شروع" readonly />
+            </div>
           </template>
           <v-date-picker
               v-model="startDate"
@@ -41,13 +33,6 @@
               :max="endDate"
               input-mode="calendar"
           ></v-date-picker>
-<!--          <v-date-picker
-              v-model="dates"
-              :hide-header="true"
-              :min="today"
-              input-mode="calendar"
-              multiple
-          ></v-date-picker>-->
         </v-menu>
       </div>
       <div class="col-12 col-md-6 mb-3">
@@ -56,16 +41,12 @@
             transition="scale-transition"
         >
           <template v-slot:activator="{ props }">
-            <v-text-field
-                v-model="endDateText"
-                density="compact"
-                label="تاریخ پایان"
-                placeholder="لطفا تاریخ پایان این مرحله را وارد کنید"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="props"
-                variant="outlined"
-            ></v-text-field>
+            <div class="input-group mb-3">
+              <span class="input-group-text">
+                <span class="far fa-calendar-alt"></span>
+              </span>
+              <input :id="'end-date-' + milestoneStage" v-model="endDateText" v-bind="props" class="form-control" type="text" placeholder="تاریخ پایان" readonly />
+            </div>
           </template>
           <v-date-picker
               v-model="endDate"
@@ -76,17 +57,11 @@
         </v-menu>
       </div>
       <div class="col-12 mb-3">
-        <v-text-field
-            density="compact"
-            label="نرخ مد نظر"
-            model-value=""
-            placeholder="مبلغ مورد انتظار برای پایان این مرحله"
-            step="100000"
-            suffix="تومان"
-            type="number"
-            variant="outlined"
-            prepend-icon="mdi-currency-usd"
-        ></v-text-field>
+        <div class="input-group mb-3">
+          <span class="input-group-text">$</span>
+          <input :id="'stage-price-' + milestoneStage" class="form-control" type="number" step="100000" placeholder="مبلغ مورد انتظار برای پایان این مرحله" />
+          <span class="input-group-text">تومان</span>
+        </div>
       </div>
     </div>
   </div>

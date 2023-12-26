@@ -1,13 +1,18 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import {isAuthenticated} from "@/util/auth-helper";
+import {getAccessTokenCookie} from "@/util/cookie-helper";
+import { useStore } from 'vuex';
 
 import Home from '../views/HomePage.vue';
 import Login from '../views/auth/LoginPage.vue';
 import Logout from '../views/auth/LogoutPage.vue';
 import Register from "@/views/auth/RegisterPage.vue";
+import ForgetPasswordPage from "@/views/auth/ForgetPasswordPage.vue";
+import ResetPasswordPage from "@/views/auth/ResetPasswordPage.vue";
 import VerifyPhoneNumberPage from "@/views/auth/VerifyPhoneNumberPage.vue";
 import VerifyEmailPage from "@/views/auth/VerifyEmailPage.vue";
 
+import ContractDetailsPage from "@/views/job/ContractDetailsPage.vue";
 import Jobs from '../views/job/JobsExplorePage.vue';
 import Chat from '../views/app/ChatPage.vue';
 import Landing from '../views/LandingPage.vue';
@@ -22,6 +27,7 @@ import YourContractsPage from "@/views/freelancer/YourContractsPage.vue";
 import YourJobsPage from "@/views/freelancer/YourJobsPage.vue";
 import SubmitJobPage from "@/views/job/SubmitJobPage.vue";
 import StepperSubmitJobPage from "@/views/job/StepperSubmitJobPage.vue";
+import ProposalDetailsPage from "@/views/freelancer/ProposalDetailsPage.vue";
 
 import ClientStatsPage from "@/views/client/ClientStatsPage.vue";
 import ProjectsPage from "@/views/client/ProjectsPage.vue";
@@ -30,6 +36,7 @@ import ContractsPage from "@/views/client/ContractsPage.vue";
 import EmploymentHistoryPage from "@/views/client/EmploymentHistoryPage.vue";
 import YourJobAdPage from "@/views/client/YourJobAdPage.vue";
 import CreateNewJobAdPage from "@/views/client/CreateNewJobAdPage.vue";
+import ClientJobAdDetailsPage from "@/views/client/ClientJobAdDetailsPage.vue";
 
 import TransactionHistoryPage from "@/views/report/TransactionHistoryPage.vue";
 import ConnectionHistoryPage from "@/views/report/ConnectionHistoryPage.vue";
@@ -59,6 +66,16 @@ const routes = [
             if (isAuthenticated()) return {name: 'home'};
         }
     },
+    {path: "/forget-password", name: "forget-password", component: ForgetPasswordPage, meta: {requiresAuth: false},
+        beforeEnter: () => {
+            if (isAuthenticated()) return {name: 'home'};
+        }
+    },
+    {path: "/reset-password", name: "reset-password", component: ResetPasswordPage, meta: {requiresAuth: false},
+        beforeEnter: () => {
+            if (isAuthenticated()) return {name: 'home'};
+        }
+    },
     {path: "/verify-phone", name: "verify-phone", component: VerifyPhoneNumberPage, meta: {requiresAuth: true}},
     {path: "/verify-email", name: "verify-email", component: VerifyEmailPage, meta: {requiresAuth: true}},
 
@@ -66,9 +83,11 @@ const routes = [
     {path: "/chat", name: "chat", component: Chat, meta: {requiresAuth: true}},
     {path: "/wallet", name: "wallet", component: Wallet, meta: {requiresAuth: true}},
     {path: "/jobs/:id", name: "jobAdDetails", component: JobAdDetails, props: true, meta: {requiresAuth: true}},
+    {path: "/contracts/:id", name: "contract-details", component: ContractDetailsPage, props: true, meta: {requiresAuth: true}},
     {path: "/profile", name: "profile", component: ProfilePage, meta: {requiresAuth: true}},
     {path: "/saved", name: "saved", component: SavedJobPage, meta: {requiresAuth: true}},
     {path: "/proposals", name: "proposals", component: ProposalsPage, meta: {requiresAuth: true}},
+    {path: "/proposals/:id", name: "proposals-details", component: ProposalDetailsPage, meta: {requiresAuth: true}},
     {path: "/freelancer/stats", name: "stats", component: FreelancerStatsPage, meta: {requiresAuth: true}},
 
     {path: "/change-profile", name: "changeProfile", component: ProfileSettingPage, meta: {requiresAuth: true}},
@@ -83,6 +102,7 @@ const routes = [
     {path: "/client/contracts", name: "client-contracts", component: ContractsPage, meta: {requiresAuth: true}},
     {path: "/client/employment-history", name: "employment-history", component: EmploymentHistoryPage, meta: {requiresAuth: true}},
     {path: "/client/ads", name: "job-ads", component: YourJobAdPage, meta: {requiresAuth: true}},
+    {path: "/client/jobs/:id", name: "job-ad-details", component: ClientJobAdDetailsPage, meta: {requiresAuth: true}},
 
     {path: "/report/transactions", name: "transactions", component: TransactionHistoryPage, meta: {requiresAuth: true}},
     {path: "/report/connections", name: "connections-history", component: ConnectionHistoryPage, meta: {requiresAuth: true}},
@@ -92,7 +112,6 @@ const routes = [
 
     {path: "/:pathMatch(.*)*", component: NotFoundPage, meta: {requiresAuth: false}},
 
-
 ];
 const router = createRouter({
     history: createWebHistory(),
@@ -101,9 +120,18 @@ const router = createRouter({
 
 // Global Navigation Guards
 router.beforeEach(function (to, from, next) {
-    if (to.meta.requiresAuth && !isAuthenticated()) {
+    const accessToken = getAccessTokenCookie();
+    if (to.meta.requiresAuth && accessToken === null) {
         next({name: 'login'});
-    } else next();
+    } else if (to.meta.requiresAuth && accessToken !== null) {
+        const store = useStore();
+        if (!store.getters.isUserPresent) {
+            store.dispatch("getUserInfo");
+        }
+        next();
+    } else {
+        next();
+    }
 });
 
 export default router;

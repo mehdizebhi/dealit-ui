@@ -28,7 +28,7 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label" for="email">ایمیل</label>
-                  <input dir="ltr" id="email" v-model="email" placeholder="example@email.com" autocomplete="on" class="form-control" type="email" required=""/>
+                  <input dir="ltr" id="email" v-model="email" placeholder="example@email.com" autocomplete="on" class="form-control" type="email" required="" />
                   <div class="invalid-feedback">ایمیل وارد شده نامعتبر است</div>
                 </div>
                 <div class="mb-3">
@@ -39,16 +39,20 @@
                 <div class="row gx-2">
                   <div class="mb-3 col-sm-6">
                     <label class="form-label" for="password">رمز عبور</label>
-                    <input dir="ltr" id="password" v-model="password" pattern="^.{6,}$" autocomplete="on" class="form-control" type="password" required=""/>
+                    <input dir="ltr" id="password" v-model="password" pattern="^.{6,}$" autocomplete="on" class="form-control" :type="passwordType" required=""/>
                     <div class="invalid-feedback">رمز عبور نامعتبر است</div>
                   </div>
                   <div class="mb-3 col-sm-6">
                     <label class="form-label" for="confirm-password">
                       تکرار رمز عبور
                     </label>
-                    <input dir="ltr" id="confirm-password" v-model="confirmPassword" autocomplete="on" class="form-control" type="password" required=""/>
+                    <input dir="ltr" id="confirm-password" v-model="confirmPassword" autocomplete="on" class="form-control" :type="passwordType" required=""/>
                     <div class="invalid-feedback">تکرار رمز عبور با رمز عبور متفاوت است</div>
                   </div>
+                </div>
+                <div class="form-check mb-4">
+                  <input class="form-check-input" id="show-password" type="checkbox" v-model="showPassword" />
+                  <label class="form-check-label" for="show-password">نمایش رمز عبور</label>
                 </div>
                 <div class="form-check">
                   <input class="form-check-input" id="freelancer" v-model="account" value="freelancer" type="radio" name="account-type" checked="" />
@@ -65,7 +69,7 @@
                   </label>
                   <div class="invalid-feedback mt-0">شما باید قبل از ثبت نام موافقت خود را اعلام کنید</div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-0">
                   <button class="btn btn-primary d-block w-100 mt-3 text-light" type="submit" name="submit">ثبت نام</button>
                 </div>
               </form>
@@ -94,7 +98,9 @@ export default {
       confirmPassword: "",
       account: "",
       agreement: false,
-      phoneNumber: ""
+      phoneNumber: "",
+      showPassword: false,
+      passwordType: "password"
     };
   },
   methods: {
@@ -118,6 +124,18 @@ export default {
         this.$router.go();
       });
     }
+  },
+  watch: {
+    showPassword(value){
+      if (value) {
+        this.passwordType = "text";
+      } else {
+        this.passwordType = "password";
+      }
+    }
+  },
+  created() {
+    this.$store.reset({ self: true, nested: true });
   }
 }
 </script>

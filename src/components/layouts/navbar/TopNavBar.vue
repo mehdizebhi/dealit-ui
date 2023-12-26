@@ -27,7 +27,7 @@
         <li class="nav-item">
           <router-link :to="{name: 'home'}" class="nav-link">خانه</router-link>
         </li>
-        <li class="nav-item dropdown">
+        <li v-if="isFreelancer" class="nav-item dropdown">
           <a id="freelancer"
               aria-expanded="false"
               aria-haspopup="true"
@@ -48,11 +48,10 @@
                 <span class="badge rounded-pill ms-2 badge-soft-success">فعال</span>
               </router-link>
               <router-link :to="{name: 'your-contracts'}" class="dropdown-item link-600 fw-medium">قراردادهای شما</router-link>
-              <a class="dropdown-item link-600 fw-medium" href="/##">تاریخچه کاری</a>
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li v-if="isClient" class="nav-item dropdown">
           <a
               id="client"
               aria-expanded="false"
@@ -70,17 +69,15 @@
                 <span class="badge rounded-pill ms-2 badge-soft-success">جستجو</span>
               </a>
               <router-link class="dropdown-item link-600 fw-medium" :to="{name: 'job-ads'}">آگهی‌های شما</router-link>
-              <a class="dropdown-item link-600 fw-medium" href="dashboard/analytics.html">دعوتنامه‌ها</a>
               <router-link class="dropdown-item link-600 fw-medium" :to="{name: 'project-space'}">پروژه‌ها</router-link>
               <router-link :to="{name: 'client-stats'}" class="dropdown-item link-600 fw-medium">آمار شما</router-link>
               <div class="dropdown-divider"></div>
               <router-link class="dropdown-item link-600 fw-medium" :to="{name: 'job-positions'}">همه شغل‌ها</router-link>
               <router-link class="dropdown-item link-600 fw-medium" :to="{name: 'client-contracts'}">همه قراردادها</router-link>
-              <router-link class="dropdown-item link-600 fw-medium" :to="{name: 'employment-history'}">تاریخچه استخدامی</router-link>
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li v-if="isClient || isFreelancer" class="nav-item dropdown">
           <a
               id="reports"
               aria-expanded="false"
@@ -95,13 +92,12 @@
             <div class="bg-white dark__bg-1000 rounded-3 py-2">
               <a v-if="false" class="dropdown-item link-600 fw-medium" href="/">بررسی اجمالی</a>
               <a v-if="false" class="dropdown-item link-600 fw-medium" href="/">گزارشات من</a>
-              <a class="dropdown-item link-600 fw-medium" href="dashboard/crm.html">صورتحساب و درآمد</a>
               <router-link class="dropdown-item link-600 fw-medium" :to="{name: 'connections-history'}">تاریخچه کانکشن</router-link>
               <router-link :to="{name: 'transactions'}" class="dropdown-item link-600 fw-medium">تاریخچه تراکنشات</router-link>
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li v-if="false" class="nav-item dropdown">
           <a
               id="admin"
               aria-expanded="false"
@@ -395,7 +391,7 @@
             <img
                 alt=""
                 class="rounded-circle"
-                src="https://dealit.s3.ir-thr-at1.arvanstorage.com/user.png"
+                :src="pictureHref"
             />
           </div>
         </a>
@@ -406,48 +402,23 @@
           <div class="bg-white dark__bg-1000 rounded-2 py-2">
             <router-link class="dropdown-item fw-bold text-warning" :to="{name: 'connections-history'}">
               <span class="fas fa-coins me-1"></span>
-              <span>کانکشن: 158</span>
+              <span>کانکشن:
+              {{ connections }}
+              </span>
             </router-link>
             <div class="dropdown-divider"></div>
             <router-link :to="{name: 'wallet'}" class="dropdown-item">کیف پول</router-link>
             <router-link :to="{name: 'profile'}" class="dropdown-item">پروفایل</router-link>
             <div class="dropdown-divider"></div>
-            <a href="/setting" class="dropdown-item">تنظیمات</a>
-            <a href="/logout" class="dropdown-item">خروج</a>
+            <router-link :to="{name: 'setting'}" class="dropdown-item">تنظیمات</router-link>
+            <button @click="onLogout" class="dropdown-item">خروج</button>
           </div>
         </div>
       </li>
-      <!-- <li class="nav-item dropdown">
-        <a
-          class="nav-link pe-0 ps-2"
-          id="navbarDropdownUser"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          <div class="avatar avatar-xl">
-            <img
-              class="rounded-circle"
-              src="../../../assets/icons/man.png"
-              alt=""
-            />
-          </div>
-        </a>
-        <div
-          class="dropdown-menu dropdown-caret dropdown-caret dropdown-menu-end py-0"
-          aria-labelledby="navbarDropdownUser"
-        >
-          <div class="bg-white dark__bg-1000 rounded-2 py-2">
-            <a class="dropdown-item" href="/login">ورود</a>
-            <a class="dropdown-item" href="/signup">ثبت نام</a>
-          </div>
-        </div>
-      </li> -->
     </ul>
     <v-progress-linear
         :absolute="true"
-        :active="false"
+        :active="loading"
         :height="4"
         :indeterminate="true"
         color="primary"
@@ -458,29 +429,30 @@
 </template>
 
 <script>
-
+import { mapGetters } from "vuex";
 import ToggleThemeBtn from "@/components/button/ToggleThemeBtn.vue";
 
 export default {
   name: "TopNavBar",
   components: {ToggleThemeBtn},
-  props: {
-    accountInfo: {
-      type: Object,
-      required: false,
-      default: () => {}
-    }
-  },
   data() {
     return {
     };
   },
   computed: {
+    loading() {
+      return this.$store.state.loading;
+    },
+    ...mapGetters(["connections", "pictureHref", "isClient", "isFreelancer"])
   },
   methods: {
     isContainsType(type) {
       return this.accountInfo.types.includes(type.toUpperCase());
-    }
+    },
+    async onLogout() {
+      await this.$store.reset();
+      this.$router.push({name: 'logout'});
+    },
   },
 }
 </script>

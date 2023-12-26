@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <!--Start NavBar Layout-->
-    <NavBar :account-info="accountInfo" />
+    <NavBar />
     <!--End NavBar Layout-->
 
     <!--Start Alert Layout-->
@@ -14,6 +14,8 @@
     <!--End Alert Layout-->
 
     <!--Start Content Divs-->
+<!--    <v-overlay v-model="loading" location-strategy="connected" scroll-strategy="block">
+    </v-overlay>-->
     <slot name="content"></slot>
     <!--End Content Divs-->
 
@@ -27,6 +29,7 @@
 import FooterLayout from "../layouts/FooterLayout.vue";
 import NavBar from "@/components/layouts/navbar/NavBar.vue";
 import AlertComponent from "@/components/base/AlertComponent.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ContentLayout",
@@ -35,19 +38,36 @@ export default {
     NavBar,
     FooterLayout,
   },
-  props: {
-    accountInfo: {
-      type: Object,
-      required: false
-    }
-  },
   data() {
     return {
       alerts: []
     };
   },
   methods: {},
-  mounted() {},
+  computed: {
+    loading() {
+      return this.$store.state.loading;
+    },
+    ...mapGetters(["confirmedEmail", "confirmedPhone", "isUserPresent"]),
+  },
+  mounted() {
+    if (this.isUserPresent) {
+      if (!this.confirmedEmail) {
+        this.alerts.push({
+          type: 'alert-warning',
+          text: 'ایمیل حساب شما هنوز تایید نشده است. لطفا از تنظیمات ایمیل خود را تایید کنید.',
+          closable: false
+        })
+      }
+      if (!this.confirmedPhone) {
+        this.alerts.push({
+          type: 'alert-warning',
+          text: 'شماه تلفن همراه حساب شما هنوز تایید نشده است. لطفا از تنظیمات شماره خود را تایید کنید.',
+          closable: false
+        })
+      }
+    }
+  },
 };
 </script>
     
