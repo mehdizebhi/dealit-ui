@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {userInfo} from "@/service/account-service";
+import {mapGetters} from "vuex";
 import {sendOTP, verifyOTP} from "@/service/auth-service";
 
 export default {
@@ -63,7 +63,6 @@ export default {
       sendButtonText: "ارسال کد",
       sendButtonDisabled: false,
       countdownSeconds: 120,
-      phoneNumber: "",
       error: ""
     };
   },
@@ -96,14 +95,19 @@ export default {
     }
   },
   mounted() {
-    userInfo().then((userInfo) => {
-      this.phoneNumber = userInfo.phoneNumber;
-      if (userInfo.confirmedPhone){
-        this.$router.push('/home');
+    if (this.confirmedPhone) {
+      this.$router.push("/home");
+    }
+  },
+  watch: {
+    confirmedPhone(value) {
+      if (value) {
+        this.$router.push("/home");
       }
-    }).catch(() => {
-      this.phoneNumber = "صفحه را دوباره رفرش کنید";
-    })
+    }
+  },
+  computed: {
+    ...mapGetters(["phoneNumber", "confirmedPhone"]),
   }
 }
 </script>

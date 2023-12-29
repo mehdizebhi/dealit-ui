@@ -1,4 +1,4 @@
-import {fetchUserInfo} from "@/api/user-api";
+import {fetchUserInfo, updateUsernameApi, updateDisplayNameApi, updateEmailApi, updatePhoneNumberApi} from "@/api/user-api";
 
 const state = {
     info: {
@@ -57,14 +57,63 @@ const getters = {
 
 const actions = {
     async getUserInfo({commit}) {
-        const response = await fetchUserInfo();
-        commit('setUserInfo', response);
+        commit('load');
+        await fetchUserInfo().then((response) => {
+            commit('setUserInfo', response);
+        }).catch(() => {});
+        commit('unload');
     },
+    async updateUsername({commit}, username) {
+        commit('load');
+        await updateUsernameApi(username).then(() => {
+            commit('updateUsername', username);
+            commit('setSnackbar', "نام کاربری شما با موفقیت تغییر کرد.");
+        }).catch(() => {})
+        commit('unload');
+    },
+    async updateEmail({commit}, email) {
+        commit('load');
+        await updateEmailApi(email).then(() => {
+            commit('updateEmail', email);
+            commit('setSnackbar', "ایمیل شما با موفقیت تغییر کرد.");
+        }).catch(() => {})
+        commit('unload');
+    },
+    async updateDisplayName({commit}, displayName) {
+        commit('load');
+        await updateDisplayNameApi(displayName).then(() => {
+            commit('updateDisplayName', displayName);
+            commit('setSnackbar', "نام نمایشی شما با موفقیت تغییر کرد.");
+        }).catch(() => {})
+        commit('unload');
+    },
+    async updatePhoneNumber({commit}, phoneNumber) {
+        commit('load');
+        await updatePhoneNumberApi(phoneNumber).then(() => {
+            commit('updatePhoneNumber', phoneNumber);
+            commit('setSnackbar', "شماره همراه شما با موفقیت تغییر کرد.");
+        }).catch(() => {})
+        commit('unload');
+    }
 };
 
 const mutations = {
     setUserInfo(state, userInfo) {
         state.info = userInfo;
+    },
+    updateUsername(state, username) {
+        state.info.username = username;
+    },
+    updateEmail(state, email) {
+        state.info.email = email;
+        state.info.confirmedEmail = false;
+    },
+    updateDisplayName(state, displayName) {
+        state.info.displayName = displayName;
+    },
+    updatePhoneNumber(state, phoneNumber) {
+        state.info.phoneNumber = phoneNumber;
+        state.info.confirmedPhone = false;
     },
 };
 

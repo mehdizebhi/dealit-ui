@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import {userInfo} from "@/service/account-service";
 import {sendOTP, verifyOTP} from "@/service/auth-service";
+import { mapGetters } from "vuex";
 
 export default {
   name: "VerifyEmailPage",
@@ -63,7 +63,6 @@ export default {
       sendButtonText: "ارسال کد",
       sendButtonDisabled: false,
       countdownSeconds: 120,
-      email: "",
       error: ""
     };
   },
@@ -96,14 +95,19 @@ export default {
     }
   },
   mounted() {
-    userInfo().then((userInfo) => {
-      this.email = userInfo.email;
-      if (userInfo.confirmedEmail){
-        this.$router.push('/home');
+    if (this.confirmedEmail) {
+      this.$router.push("/home");
+    }
+  },
+  watch: {
+    confirmedEmail(value) {
+      if (value) {
+        this.$router.push("/home");
       }
-    }).catch(() => {
-      this.email = "صفحه را دوباره رفرش کنید";
-    })
+    }
+  },
+  computed: {
+    ...mapGetters(["email", "confirmedEmail"]),
   }
 }
 </script>

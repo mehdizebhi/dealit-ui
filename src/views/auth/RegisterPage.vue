@@ -47,7 +47,8 @@
                       تکرار رمز عبور
                     </label>
                     <input dir="ltr" id="confirm-password" v-model="confirmPassword" autocomplete="on" class="form-control" :type="passwordType" required=""/>
-                    <div class="invalid-feedback">تکرار رمز عبور با رمز عبور متفاوت است</div>
+                    <div class="invalid-feedback">تکرار رمز عبور نمی تواند خالی باشد</div>
+                    <small v-show="fail" class="text-danger">{{ error }}</small>
                   </div>
                 </div>
                 <div class="form-check mb-4">
@@ -70,7 +71,9 @@
                   <div class="invalid-feedback mt-0">شما باید قبل از ثبت نام موافقت خود را اعلام کنید</div>
                 </div>
                 <div class="mb-0">
-                  <button class="btn btn-primary d-block w-100 mt-3 text-light" type="submit" name="submit">ثبت نام</button>
+                  <button class="btn btn-primary d-block w-100 mt-3 text-light" type="submit" name="submit" :disabled="waiting">ثبت نام
+                    <v-progress-circular v-show="waiting" :width="3" :size="20" indeterminate></v-progress-circular>
+                  </button>
                 </div>
               </form>
             </div>
@@ -100,7 +103,10 @@ export default {
       agreement: false,
       phoneNumber: "",
       showPassword: false,
-      passwordType: "password"
+      passwordType: "password",
+      waiting: false,
+      error: '',
+      fail: false,
     };
   },
   methods: {
@@ -108,6 +114,14 @@ export default {
       if (this.agreement === false){
         return;
       }
+      if (this.password !== this.confirmPassword) {
+        this.fail = true;
+        this.error = 'تکرار رمز عبور با رمز عبور متفاوت است';
+        return;
+      }
+      this.fail = false;
+      this.error = '';
+      this.waiting = true;
       const user = {
         "username": this.username,
         "password": this.password,
@@ -119,9 +133,10 @@ export default {
       }
       signup(user).then((signedInUser) => {
         this.$cookies.set("access_token", signedInUser.token.accessToken, Math.floor(signedInUser.token.exp - (Date.now() / 1_000)));
+        this.$cookies.set("refresh_token", signedInUser.token.refreshToken);
         this.$router.push('/verify-phone');
       }).catch(() => {
-        this.$router.go();
+        this.waiting = false;
       });
     }
   },
@@ -133,9 +148,6 @@ export default {
         this.passwordType = "password";
       }
     }
-  },
-  created() {
-    this.$store.reset({ self: true, nested: true });
   }
 }
 </script>

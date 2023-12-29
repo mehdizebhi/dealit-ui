@@ -51,14 +51,14 @@
                             <div class="mb-3">
                               <label class="form-label" for="setting-username">نام کاربری</label>
                               <div class="input-group">
-                                <input :disabled="!editUsername" :value="username" id="setting-username" pattern="^[a-zA-Z][a-zA-Z0-9_]{4,}$" class="form-control" type="text" required=""/>
+                                <input dir="ltr" :disabled="!editUsername" v-model="newUsername" id="setting-username" pattern="^[a-zA-Z][a-zA-Z0-9_]{4,}$" class="form-control" type="text" required=""/>
                                 <button @click="editUsername = true" v-show="!editUsername" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
-                                <button v-show="editUsername" class="input-group-text" type="submit">
+                                <button v-show="editUsername" @click="changeUsername" class="input-group-text" type="submit">
                                   <span class="fas fa-check"></span>
                                 </button>
-                                <button @click="editUsername = false" v-show="editUsername" class="input-group-text">
+                                <button @click="editUsername = false; newUsername = username" v-show="editUsername" class="input-group-text">
                                   <span class="fas fa-times"></span>
                                 </button>
                               </div>
@@ -67,14 +67,14 @@
                             <div class="mb-3">
                               <label class="form-label" for="setting-display-name">نام نمایشی</label>
                               <div class="input-group">
-                                <input :disabled="!editDisplayName" :value="displayName" id="setting-display-name" class="form-control" type="text" required=""/>
+                                <input :disabled="!editDisplayName" v-model="newDisplayName" id="setting-display-name" class="form-control" type="text" required=""/>
                                 <button @click="editDisplayName = true" v-show="!editDisplayName" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
-                                <button v-show="editDisplayName" class="input-group-text" type="submit">
+                                <button v-show="editDisplayName" @click="changeDisplayName" class="input-group-text" type="submit">
                                   <span class="fas fa-check"></span>
                                 </button>
-                                <button @click="editDisplayName = false" v-show="editDisplayName" class="input-group-text">
+                                <button @click="editDisplayName = false; newDisplayName = displayName" v-show="editDisplayName" class="input-group-text">
                                   <span class="fas fa-times"></span>
                                 </button>
                               </div>
@@ -93,24 +93,24 @@
                             <div class="mb-3">
                               <label class="form-label" for="setting-email">
                                 ایمیل
-                                <span class="badge rounded-pill badge-soft-success me-2">
+                                <span v-if="confirmedEmail" class="badge rounded-pill badge-soft-success me-2">
                                   <span>تایید شده</span>
                                   <span class="fas fa-check ms-1"></span>
                                 </span>
-                                <span class="badge rounded-pill badge-soft-warning me-2">
+                                <span v-else class="badge rounded-pill badge-soft-warning me-2">
                                   <span>تایید نشده</span>
                                   <span class="fas fa-exclamation-triangle ms-1"></span>
                                 </span>
                               </label>
                               <div class="input-group">
-                                <input :disabled="!editEmail" :value="email" dir="ltr" id="setting-email" class="form-control" type="email" required=""/>
+                                <input :disabled="!editEmail" v-model="newEmail" dir="ltr" id="setting-email" class="form-control" type="email" required=""/>
                                 <button @click="editEmail = true" v-show="!editEmail" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
-                                <button v-show="editEmail" class="input-group-text" type="submit">
+                                <button v-show="editEmail" @click="changeEmail" class="input-group-text" type="submit">
                                   <span class="fas fa-check"></span>
                                 </button>
-                                <button @click="editEmail = false" v-show="editEmail" class="input-group-text">
+                                <button @click="editEmail = false; newEmail = email" v-show="editEmail" class="input-group-text">
                                   <span class="fas fa-times"></span>
                                 </button>
                               </div>
@@ -119,6 +119,10 @@
                             <div class="mb-1">
                             </div>
                           </form>
+                          <router-link v-if="!confirmedEmail" class="fs--1" :to="{name: 'verify-email'}">
+                            <span class="d-inline-block ms-1">&larr;</span>
+                            تایید ایمیل
+                          </router-link>
                         </div>
                       </div>
                     </div>
@@ -129,24 +133,24 @@
                             <div class="mb-3">
                               <label class="form-label" for="setting-phone-number">
                                 تلفن همراه
-                                <span class="badge rounded-pill badge-soft-success me-2">
+                                <span v-if="confirmedPhone" class="badge rounded-pill badge-soft-success me-2">
                                   <span>تایید شده</span>
                                   <span class="fas fa-check ms-1"></span>
                                 </span>
-                                <span class="badge rounded-pill badge-soft-warning me-2">
+                                <span v-else class="badge rounded-pill badge-soft-warning me-2">
                                   <span>تایید نشده</span>
                                   <span class="fas fa-exclamation-triangle ms-1"></span>
                                 </span>
                               </label>
                               <div class="input-group">
-                                <input :disabled="!editPhone" :value="phoneNumber" dir="ltr" id="setting-phone-number" pattern="^09\d{9}$" class="form-control" type="tel" required=""/>
+                                <input :disabled="!editPhone" v-model="newPhoneNumber" dir="ltr" id="setting-phone-number" pattern="^09\d{9}$" class="form-control" type="tel" required=""/>
                                 <button @click="editPhone = true" v-show="!editPhone" class="input-group-text">
                                   <span class="fas fa-edit"></span>
                                 </button>
-                                <button v-show="editPhone" class="input-group-text" type="submit">
+                                <button v-show="editPhone" @click="changePhoneNumber" class="input-group-text" type="submit">
                                   <span class="fas fa-check"></span>
                                 </button>
-                                <button @click="editPhone = false" v-show="editPhone" class="input-group-text">
+                                <button @click="editPhone = false; newPhoneNumber = phoneNumber" v-show="editPhone" class="input-group-text">
                                   <span class="fas fa-times"></span>
                                 </button>
                               </div>
@@ -155,6 +159,10 @@
                             <div class="mb-1">
                             </div>
                           </form>
+                          <router-link v-if="!confirmedPhone" class="fs--1" :to="{name: 'verify-phone'}">
+                            <span class="d-inline-block ms-1">&larr;</span>
+                            تایید شماره همراه
+                          </router-link>
                         </div>
                       </div>
                     </div>
@@ -194,94 +202,175 @@
                   </div>
 
                   <div v-if="nav.pane.id === 'payment-tab'">
-                    <div class="alert alert-warning" role="alert">شما حساب بانکی اضافه نکردید. لطفا حساب بانکی خود را از قسمت زیر اضافه و تایید کنید.</div>
-                    <div class="row g-3 mb-3">
-                      <div v-show="!editCard" class="col-12">
-                        <div class="card h-100">
-                          <div class="card-header bg-light d-flex flex-between-center py-2">
-                            <h6 class="mb-0">حساب بانکی فعال شما</h6>
-                            <div class="dropdown font-sans-serif position-static d-inline-block btn-reveal-trigger"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" id="dropdown-payment-methods" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
-                              <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-payment-methods">
-                                <button @click="editCard = true" class="dropdown-item">ویرایش اطلاعات</button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card-body">
-                            <div class="row g-3 h-100">
-                              <div class="col-sm-6 col-lg-12">
-                                <div class="card position-relative rounded-4">
-                                  <div class="bg-holder bg-card rounded-4" style="background-image:url(../../assets/img/icons/spot-illustrations/corner-2.png);"></div>
-                                  <!--/.bg-holder-->
-                                  <div class="card-body p-3 pt-5 pt-xxl-4"><img class="mb-3" src="../../assets/img/icons/chip.png" alt="" width="30" />
-                                    <h6 class="text-primary font-base lh-1 mb-1">6037 6975 2423 9933</h6>
-                                    <h6 class="fs--2 fw-semi-bold text-facebook mb-3">05/06</h6>
-                                    <h6 class="mb-0 text-facebook">سیدمهدی ذبحی اشکذری</h6><img class="position-absolute end-0 bottom-0 mb-2 me-2" src="../../assets/img/icons/master-card.png" alt="" width="70" />
-                                  </div>
+                    <div v-if="this.isCreditCardPresent">
+                      <div class="row g-3 mb-3">
+                        <div v-show="!editCard" class="col-12">
+                          <div class="card h-100">
+                            <div class="card-header bg-light d-flex flex-between-center py-2">
+                              <h6 class="mb-0">حساب بانکی فعال شما</h6>
+                              <div class="dropdown font-sans-serif position-static d-inline-block btn-reveal-trigger">
+                                <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal dropdown-caret-none" type="button" id="dropdown-payment-methods" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                                <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-payment-methods">
+                                  <button @click="editCard = true" class="dropdown-item">ویرایش اطلاعات</button>
                                 </div>
                               </div>
-                              <div class="col-sm-6 col-lg-12">
-                                <table class="table table-borderless fw-medium font-sans-serif fs--1 mb-2">
-                                  <tbody>
-                                  <tr>
-                                    <td class="p-1" style="width: 35%;">نوع:</td>
-                                    <td class="p-1 text-600">کارت اعتباری</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="p-1" style="width: 35%;">نام:</td>
-                                    <td class="p-1 text-600">سیدمهدی ذبحی اشکذری</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="p-1" style="width: 35%;">انقضا:</td>
-                                    <td class="p-1 text-600">05/06</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="p-1" style="width: 35%;">صادرکننده:</td>
-                                    <td class="p-1 text-600">بانک صادرات</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="p-1" style="width: 35%;">شماره شبا:</td>
-                                    <td class="p-1 text-600">IR 98400020032504569011</td>
-                                  </tr>
-                                  </tbody>
-                                </table>
-                                <span class="badge rounded-pill badge-soft-success me-2">
-                                  <span>تایید شده</span>
-                                  <span class="fas fa-check ms-1" data-fa-transform="shrink-4"></span>
-                                </span>
-                                <span class="badge rounded-pill badge-soft-warning">
-                                  <span>غیرقابل پرداخت</span>
-                                  <span class="fas fa-exclamation-triangle ms-1" data-fa-transform="shrink-4"></span>
-                                </span>
+                            </div>
+                            <div class="card-body">
+                              <div class="row g-3 h-100">
+                                <div class="col-sm-6 col-lg-12">
+                                  <div class="card position-relative rounded-4">
+                                    <div class="bg-holder bg-card rounded-4" style="background-image:url(../../assets/img/icons/spot-illustrations/corner-2.png);"></div>
+                                    <!--/.bg-holder-->
+                                    <div class="card-body p-3 pt-5 pt-xxl-4"><img class="mb-3" src="../../assets/img/icons/chip.png" alt="" width="30" />
+                                      <h6 class="text-primary font-base lh-1 mb-1">{{ creditCardInfo.cardNumber }}</h6>
+                                      <h6 class="fs--2 fw-semi-bold text-facebook mb-3">{{ creditCardInfo.expiredMonth }}
+                                        /
+                                        {{ creditCardInfo.expiredYear }}</h6>
+                                      <h6 class="mb-0 text-facebook">{{ creditCardInfo.ownerName }}</h6><img class="position-absolute end-0 bottom-0 mb-2 me-2" src="../../assets/img/icons/master-card.png" alt="" width="70" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-12">
+                                  <table class="table table-borderless fw-medium font-sans-serif fs--1 mb-2">
+                                    <tbody>
+                                    <tr>
+                                      <td class="p-1" style="width: 35%;">نوع:</td>
+                                      <td class="p-1 text-600">{{ creditCardInfo.type }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td class="p-1" style="width: 35%;">صادرکننده:</td>
+                                      <td class="p-1 text-600">{{ creditCardInfo.bank }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td class="p-1" style="width: 35%;">شماره شبا:</td>
+                                      <td class="p-1 text-600">{{ creditCardInfo.iban }}</td>
+                                    </tr>
+                                    </tbody>
+                                  </table>
+                                  <span v-if="creditCardInfo.confirmed" class="badge rounded-pill badge-soft-success me-2">
+                                    <span>تایید شده</span>
+                                    <span class="fas fa-check ms-1" data-fa-transform="shrink-4"></span>
+                                  </span>
+                                  <span v-else class="badge rounded-pill badge-soft-warning">
+                                    <span>تایید نشده</span>
+                                    <span class="fas fa-exclamation-triangle ms-1" data-fa-transform="shrink-4"></span>
+                                  </span>
+                                  <span v-if="creditCardInfo.payable" class="badge rounded-pill badge-soft-success me-2">
+                                    <span>قابل پرداخت</span>
+                                    <span class="fas fa-check ms-1" data-fa-transform="shrink-4"></span>
+                                  </span>
+                                  <span v-else class="badge rounded-pill badge-soft-warning">
+                                    <span>غیرقابل پرداخت</span>
+                                    <span class="fas fa-exclamation-triangle ms-1" data-fa-transform="shrink-4"></span>
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                      <div v-show="editCard" class="card">
+                        <div class="card-body">
+                          <div class="row flex-between-center">
+                            <form class="needs-validation" @submit.prevent="" novalidate="">
+                              <div class="row">
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-number">شماره کارت</label>
+                                  <input dir="ltr" id="setting-card-number" placeholder="1234 5678 9012 3456" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-iban">شماره شبا</label>
+                                  <div class="input-group">
+                                    <input dir="ltr" id="setting-card-iban" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                    <span class="input-group-text">IR</span>
+                                  </div>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                  <label class="form-label" for="setting-card-month-expired">ماه انقضا</label>
+                                  <input dir="ltr" id="setting-card-month-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                  <label class="form-label" for="setting-card-year-expired">سال انقضا</label>
+                                  <input dir="ltr" id="setting-card-year-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-bank">بانک صادرکننده</label>
+                                  <input dir="ltr" id="setting-card-bank" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-owner-name">نام و نام خانوادگی</label>
+                                  <input dir="ltr" id="setting-card-owner-name" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-type">نوع کارت</label>
+                                  <input dir="ltr" id="setting-card-type" placeholder="" pattern="" class="form-control" type="text"/>
+                                </div>
+                                <div class="mb-1">
+                                  <button class="btn btn-primary d-block w-100 mt-5 text-light" type="button">ذخیره اطلاعات</button>
+                                  <button @click="editCard = false" class="btn btn-secondary d-block w-100 mt-2 text-light" type="button">لغو</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div v-show="editCard" class="card">
-                      <div class="card-body">
-                        <div class="row flex-between-center">
-                          <form class="needs-validation" @submit.prevent="" novalidate="">
-                            <div class="mb-3">
-                              <label class="form-label" for="card-number">شماره شبا</label>
-                              <input dir="ltr" id="card-number" placeholder="1234 5678 9012 3456" pattern="" class="form-control" type="text" required=""/>
-                              <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label" for="setting-card-number">شماره کارت</label>
-                              <input dir="ltr" id="setting-card-number" placeholder="" pattern="" class="form-control" type="text" required=""/>
-                              <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label" for="setting-card-expired">تاریخ انقضا</label>
-                              <input dir="ltr" id="setting-card-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
-                              <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
-                            </div>
-                            <div class="mb-1">
-                              <button class="btn btn-primary d-block w-100 mt-5 text-light" type="button">ذخیره اطلاعات</button>
-                              <button @click="editCard = false" class="btn btn-secondary d-block w-100 mt-2 text-light" type="button">لغو</button>
-                            </div>
-                          </form>
+                    <div v-else>
+                      <div class="alert alert-warning" role="alert">شما حساب بانکی اضافه نکردید. لطفا حساب بانکی خود را از قسمت زیر اضافه و تایید کنید.</div>
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row flex-between-center">
+                            <form class="needs-validation" @submit.prevent="" novalidate="">
+                              <div class="row">
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-number">شماره کارت</label>
+                                  <input dir="ltr" id="setting-card-number" placeholder="1234 5678 9012 3456" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-iban">شماره شبا</label>
+                                  <div class="input-group">
+                                    <input dir="ltr" id="setting-card-iban" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                    <span class="input-group-text">IR</span>
+                                  </div>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                  <label class="form-label" for="setting-card-month-expired">ماه انقضا</label>
+                                  <input dir="ltr" id="setting-card-month-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                  <label class="form-label" for="setting-card-year-expired">سال انقضا</label>
+                                  <input dir="ltr" id="setting-card-year-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-bank">بانک صادرکننده</label>
+                                  <input dir="ltr" id="setting-card-bank" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-owner-name">نام و نام خانوادگی</label>
+                                  <input dir="ltr" id="setting-card-owner-name" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                  <label class="form-label" for="setting-card-type">نوع کارت</label>
+                                  <input dir="ltr" id="setting-card-type" placeholder="" pattern="" class="form-control" type="text"/>
+                                </div>
+                                <div class="mb-1">
+                                  <button class="btn btn-primary d-block w-100 mt-5 text-light" type="button">ذخیره اطلاعات</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -475,7 +564,7 @@
 
 <script>
 import ContentLayout from "@/components/layouts/ContentLayout.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "SettingPage",
@@ -499,19 +588,49 @@ export default {
       showPassword: false,
       passwordType: "password",
       newUsername: "",
+      newEmail: "",
+      newDisplayName: "",
+      newPhoneNumber: "",
     };
   },
   watch: {
-    showPassword(value){
+    showPassword(value) {
       if (value) {
         this.passwordType = "text";
       } else {
         this.passwordType = "password";
       }
-    }
+    },
   },
   computed: {
-    ...mapGetters(["username", "displayName", "pictureHref", "email", "phoneNumber"]),
+    ...mapGetters(["username", "displayName", "pictureHref", "email", "phoneNumber", "confirmedPhone", "confirmedEmail", "creditCardInfo", "isCreditCardPresent"]),
+  },
+  methods: {
+    async changeUsername() {
+      this.editUsername = false;
+      await this.updateUsername(this.newUsername);
+    },
+    async changeEmail() {
+      this.editEmail = false;
+      await this.updateEmail(this.newEmail);
+    },
+    async changeDisplayName() {
+      this.editDisplayName = false;
+      await this.updateDisplayName(this.newDisplayName);
+    },
+    async changePhoneNumber() {
+      this.editPhone = false;
+      await this.updatePhoneNumber(this.newPhoneNumber);
+    },
+    ...mapActions(["getUserInfo", "updateUsername", "updateEmail", "updateDisplayName", "updatePhoneNumber", "getCreditCardFromApi"]),
+  },
+  async created() {
+    await this.getUserInfo();
+    this.newUsername = this.username;
+    this.newEmail = this.email;
+    this.newDisplayName = this.displayName;
+    this.newPhoneNumber = this.phoneNumber;
+    await this.getCreditCardFromApi();
   },
 }
 </script>

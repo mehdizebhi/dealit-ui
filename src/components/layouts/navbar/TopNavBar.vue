@@ -419,7 +419,7 @@
     <v-progress-linear
         :absolute="true"
         :active="loading"
-        :height="4"
+        :height="5"
         :indeterminate="true"
         color="primary"
         rounded

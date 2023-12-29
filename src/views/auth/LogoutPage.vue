@@ -34,9 +34,14 @@ import { logoutApi } from "@/api/auth-api";
 export default {
   name: "LogoutPage",
   async created() {
-    await logoutApi();
+    await logoutApi().catch(() => {
+      this.$cookies.remove("access_token");
+      this.$cookies.remove("refresh_token");
+      this.$router.push('/login');
+    });
     await this.$store.reset();
     this.$cookies.remove("access_token");
+    this.$cookies.remove("refresh_token");
     this.$router.push('/login');
   },
   methods: {

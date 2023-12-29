@@ -1,7 +1,10 @@
 import dealitApi from "@/api/dealit-api";
 import {getCookie} from "@/util/cookie-helper";
+import {useStore} from "vuex";
+import {handleError} from "@/util/api-error-handler";
 
 export function signupApi(username, password, confirmPassword, email, displayName, phoneNumber, account) {
+    const store = useStore();
     return dealitApi.post(
         "auth/signup", {
             username,
@@ -16,12 +19,13 @@ export function signupApi(username, password, confirmPassword, email, displayNam
             return response.data
         })
         .catch((error) => {
-            console.log("[Signup API] - Something wrong in signup api call.");
+            handleError(error, store);
             throw error;
         });
 }
 
-export function loginApi(username, password) {
+export async function loginApi(username, password) {
+    const store = useStore();
     return dealitApi
         .post("auth/token", {
             username,
@@ -31,12 +35,13 @@ export function loginApi(username, password) {
             return response.data;
         })
         .catch((error) => {
-            console.log("[Login API] - Something wrong in login api call.");
+            handleError(error, store);
             throw error;
         });
 }
 
 export function logoutApi() {
+    const store = useStore();
     return dealitApi
         .post("auth/logout", {}, {
             headers: {
@@ -44,12 +49,13 @@ export function logoutApi() {
             }
         })
         .catch((error) => {
-            console.log("[Logout API] - Something wrong in logout api call.");
+            handleError(error, store);
             throw error;
         });
 }
 
 export function sendOTPApi() {
+    const store = useStore();
     return dealitApi
         .post("auth/otp", {}, {
             headers: {
@@ -60,7 +66,7 @@ export function sendOTPApi() {
             return response.data;
         })
         .catch((error) => {
-            console.log("[OTP API] - Something wrong in sending otp code.");
+            handleError(error, store);
             throw error;
         });
 }

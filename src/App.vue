@@ -1,5 +1,5 @@
 <template>
-  <router-view :key="$route.fullPath" :accountInfo="accountInfo"></router-view>
+  <router-view :key="$route.fullPath"></router-view>
 </template>
 
 <script>
@@ -7,8 +7,6 @@ export default {
   name: "App",
   data() {
     return {
-      token: "",
-      accountInfo: null
     };
   },
   methods: {

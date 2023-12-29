@@ -91,6 +91,7 @@ export default {
             .then((token) => {
               const expiredPeriod = Math.floor(token.exp - (Date.now() / 1_000));
               this.setCookie("access_token", token.accessToken, expiredPeriod);
+              this.$cookies.set("refresh_token", token.refreshToken);
               this.$router.push('/home');
             }).catch(() => {
           this.status = "fail";
@@ -116,9 +117,6 @@ export default {
         this.passwordType = "password";
       }
     }
-  },
-  created() {
-    this.$store.reset({ self: true, nested: true });
   }
 };
 </script>

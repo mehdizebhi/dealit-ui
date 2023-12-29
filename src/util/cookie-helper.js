@@ -1,3 +1,4 @@
+import VueCookies from 'vue-cookies';
 // Separate JavaScript module for cookie-related functions
 
 // Function to get a specific cookie value by its name
@@ -16,3 +17,14 @@ export function getCookie(name) {
 export function getAccessTokenCookie() {
     return getCookie("access_token");
 }
+
+export function setAuthenticationCookies(token) {
+    const expiredPeriod = Math.floor(token.exp - (Date.now() / 1_000));
+    VueCookies.set("access_token", token.accessToken, expiredPeriod);
+    VueCookies.set("refresh_token", token.refreshToken);
+}
+
+/*
+export function setCookie(name, value, expired = "1d") {
+    this.$cookies.set(name, value, expired);
+}*/
