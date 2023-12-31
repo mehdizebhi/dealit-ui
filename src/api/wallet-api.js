@@ -19,3 +19,25 @@ export async function fetchCreditCardDetailsApi() {
             throw error;
         });
 }
+
+export async function saveCreditCardDetailsApi(cardNumber, ownerName, expiredMonth, expiredYear, type, bank, iban) {
+    const store = useStore();
+    return dealitApi.post('/wallets/credit-card', {
+        "cardNumber": cardNumber,
+        "ownerName": ownerName,
+        "expiredMonth": expiredMonth,
+        "expiredYear": expiredYear,
+        "type": type,
+        "bank": bank,
+        "iban": iban
+    },{
+        headers: {
+            Authorization: 'Bearer ' + getAccessTokenCookie()
+        }
+    })
+        .then(() => {})
+        .catch((error) => {
+            handleError(error, store);
+            throw error;
+        });
+}

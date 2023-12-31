@@ -52,7 +52,7 @@
                               <label class="form-label" for="setting-username">نام کاربری</label>
                               <div class="input-group">
                                 <input dir="ltr" :disabled="!editUsername" v-model="newUsername" id="setting-username" pattern="^[a-zA-Z][a-zA-Z0-9_]{4,}$" class="form-control" type="text" required=""/>
-                                <button @click="editUsername = true" v-show="!editUsername" class="input-group-text">
+                                <button @click="editUsername = true" v-show="!editUsername" class="input-group-text" :disabled="loading">
                                   <span class="fas fa-edit"></span>
                                 </button>
                                 <button v-show="editUsername" @click="changeUsername" class="input-group-text" type="submit">
@@ -68,7 +68,7 @@
                               <label class="form-label" for="setting-display-name">نام نمایشی</label>
                               <div class="input-group">
                                 <input :disabled="!editDisplayName" v-model="newDisplayName" id="setting-display-name" class="form-control" type="text" required=""/>
-                                <button @click="editDisplayName = true" v-show="!editDisplayName" class="input-group-text">
+                                <button @click="editDisplayName = true" v-show="!editDisplayName" class="input-group-text" :disabled="loading">
                                   <span class="fas fa-edit"></span>
                                 </button>
                                 <button v-show="editDisplayName" @click="changeDisplayName" class="input-group-text" type="submit">
@@ -104,7 +104,7 @@
                               </label>
                               <div class="input-group">
                                 <input :disabled="!editEmail" v-model="newEmail" dir="ltr" id="setting-email" class="form-control" type="email" required=""/>
-                                <button @click="editEmail = true" v-show="!editEmail" class="input-group-text">
+                                <button @click="editEmail = true" v-show="!editEmail" class="input-group-text" :disabled="loading">
                                   <span class="fas fa-edit"></span>
                                 </button>
                                 <button v-show="editEmail" @click="changeEmail" class="input-group-text" type="submit">
@@ -144,7 +144,7 @@
                               </label>
                               <div class="input-group">
                                 <input :disabled="!editPhone" v-model="newPhoneNumber" dir="ltr" id="setting-phone-number" pattern="^09\d{9}$" class="form-control" type="tel" required=""/>
-                                <button @click="editPhone = true" v-show="!editPhone" class="input-group-text">
+                                <button @click="editPhone = true" v-show="!editPhone" class="input-group-text" :disabled="loading">
                                   <span class="fas fa-edit"></span>
                                 </button>
                                 <button v-show="editPhone" @click="changePhoneNumber" class="input-group-text" type="submit">
@@ -175,17 +175,17 @@
                           <form class="needs-validation" @submit.prevent="" novalidate="">
                             <div class="mb-3">
                               <label class="form-label" for="setting-old-password">رمز عبور جاری</label>
-                              <input dir="ltr" id="setting-old-password" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
+                              <input dir="ltr" id="setting-old-password" v-model="currentPassword" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
                               <div class="invalid-feedback">رمز عبور نامعتبر است</div>
                             </div>
                             <div class="mb-3">
                               <label class="form-label" for="setting-new-password">رمز عبور جدید</label>
-                              <input dir="ltr" id="setting-new-password" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
+                              <input dir="ltr" id="setting-new-password" v-model="newPassword" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
                               <div class="invalid-feedback">رمز عبور نامعتبر است</div>
                             </div>
                             <div class="mb-3">
                               <label class="form-label" for="setting-confirm-new-password">تکرار رمز عبور جدید</label>
-                              <input dir="ltr" id="setting-confirm-new-password" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
+                              <input dir="ltr" id="setting-confirm-new-password" v-model="confirmNewPassword" autocomplete="" pattern="^.{6,}$" class="form-control" :type="passwordType" required=""/>
                               <div class="invalid-feedback">رمز عبور نامعتبر است</div>
                             </div>
                             <div class="form-check mb-4">
@@ -193,7 +193,7 @@
                               <label class="form-check-label" for="show-password">نمایش رمز عبور</label>
                             </div>
                             <div class="mb-1">
-                              <button class="btn btn-primary d-block w-100 mt-5 text-light" type="submit" name="submit">ویرایش رمز عبور</button>
+                              <button @click="changePassword" class="btn btn-primary d-block w-100 mt-5 text-light" type="submit" name="submit" :disabled="loading">ویرایش رمز عبور</button>
                             </div>
                           </form>
                         </div>
@@ -272,48 +272,48 @@
                       <div v-show="editCard" class="card">
                         <div class="card-body">
                           <div class="row flex-between-center">
-                            <form class="needs-validation" @submit.prevent="" novalidate="">
+                            <form class="needs-validation" @submit.prevent="changeCreditCard" novalidate="">
                               <div class="row">
                                 <div class="col-12 mb-3">
                                   <label class="form-label" for="setting-card-number">شماره کارت</label>
-                                  <input dir="ltr" id="setting-card-number" placeholder="1234 5678 9012 3456" pattern="" class="form-control" type="text" required=""/>
+                                  <input dir="ltr" id="setting-card-number" v-model="creditCard.cardNumber" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
                                   <label class="form-label" for="setting-card-iban">شماره شبا</label>
                                   <div class="input-group">
-                                    <input dir="ltr" id="setting-card-iban" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                    <input dir="ltr" id="setting-card-iban" v-model="creditCard.iban" placeholder="" class="form-control" type="text" required=""/>
                                     <span class="input-group-text">IR</span>
                                   </div>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-6 mb-3">
                                   <label class="form-label" for="setting-card-month-expired">ماه انقضا</label>
-                                  <input dir="ltr" id="setting-card-month-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <input dir="ltr" id="setting-card-month-expired" v-model="creditCard.expiredMonth" placeholder="" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-6 mb-3">
                                   <label class="form-label" for="setting-card-year-expired">سال انقضا</label>
-                                  <input dir="ltr" id="setting-card-year-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <input dir="ltr" id="setting-card-year-expired" v-model="creditCard.expiredYear" placeholder="" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
                                   <label class="form-label" for="setting-card-bank">بانک صادرکننده</label>
-                                  <input dir="ltr" id="setting-card-bank" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <input id="setting-card-bank" v-model="creditCard.bank" placeholder="" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
                                   <label class="form-label" for="setting-card-owner-name">نام و نام خانوادگی</label>
-                                  <input dir="ltr" id="setting-card-owner-name" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <input id="setting-card-owner-name" v-model="creditCard.ownerName" placeholder="" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
                                   <label class="form-label" for="setting-card-type">نوع کارت</label>
-                                  <input dir="ltr" id="setting-card-type" placeholder="" pattern="" class="form-control" type="text"/>
+                                  <input id="setting-card-type" v-model="creditCard.type" placeholder="" class="form-control" type="text"/>
                                 </div>
                                 <div class="mb-1">
-                                  <button class="btn btn-primary d-block w-100 mt-5 text-light" type="button">ذخیره اطلاعات</button>
-                                  <button @click="editCard = false" class="btn btn-secondary d-block w-100 mt-2 text-light" type="button">لغو</button>
+                                  <button class="btn btn-primary d-block w-100 mt-5 text-light" type="submit" :disabled="loading">ذخیره اطلاعات</button>
+                                  <button @click="editCard = false" class="btn btn-secondary d-block w-100 mt-2 text-light" type="button">بازگشت</button>
                                 </div>
                               </div>
                             </form>
@@ -326,47 +326,47 @@
                       <div class="card">
                         <div class="card-body">
                           <div class="row flex-between-center">
-                            <form class="needs-validation" @submit.prevent="" novalidate="">
+                            <form class="needs-validation" @submit.prevent="addNewCreditCard">
                               <div class="row">
                                 <div class="col-12 mb-3">
-                                  <label class="form-label" for="setting-card-number">شماره کارت</label>
-                                  <input dir="ltr" id="setting-card-number" placeholder="1234 5678 9012 3456" pattern="" class="form-control" type="text" required=""/>
+                                  <label class="form-label" for="setting-new-card-number">شماره کارت</label>
+                                  <input dir="ltr" id="setting-new-card-number" v-model="newCreditCard.cardNumber" placeholder="1234 5678 9012 3456" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
-                                  <label class="form-label" for="setting-card-iban">شماره شبا</label>
+                                  <label class="form-label" for="setting-new-card-iban">شماره شبا</label>
                                   <div class="input-group">
-                                    <input dir="ltr" id="setting-card-iban" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                    <input dir="ltr" id="setting-new-card-iban" v-model="newCreditCard.iban" class="form-control" type="text" required=""/>
                                     <span class="input-group-text">IR</span>
                                   </div>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-6 mb-3">
-                                  <label class="form-label" for="setting-card-month-expired">ماه انقضا</label>
-                                  <input dir="ltr" id="setting-card-month-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <label class="form-label" for="setting-new-card-month-expired">ماه انقضا</label>
+                                  <input dir="ltr" id="setting-new-card-month-expired" placeholder="06" v-model="newCreditCard.expiredMonth" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-6 mb-3">
-                                  <label class="form-label" for="setting-card-year-expired">سال انقضا</label>
-                                  <input dir="ltr" id="setting-card-year-expired" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <label class="form-label" for="setting-new-card-year-expired">سال انقضا</label>
+                                  <input dir="ltr" id="setting-new-card-year-expired" v-model="newCreditCard.expiredYear" placeholder="05" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
-                                  <label class="form-label" for="setting-card-bank">بانک صادرکننده</label>
-                                  <input dir="ltr" id="setting-card-bank" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <label class="form-label" for="setting-new-card-bank">بانک صادرکننده</label>
+                                  <input id="setting-new-card-bank" v-model="newCreditCard.bank" placeholder="صادرات" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
-                                  <label class="form-label" for="setting-card-owner-name">نام و نام خانوادگی</label>
-                                  <input dir="ltr" id="setting-card-owner-name" placeholder="" pattern="" class="form-control" type="text" required=""/>
+                                  <label class="form-label" for="setting-new-card-owner-name">نام و نام خانوادگی</label>
+                                  <input id="setting-new-card-owner-name" v-model="newCreditCard.ownerName" class="form-control" type="text" required=""/>
                                   <div class="invalid-feedback">این فیلد نمی تواند خالی باشد</div>
                                 </div>
                                 <div class="col-12 mb-3">
-                                  <label class="form-label" for="setting-card-type">نوع کارت</label>
-                                  <input dir="ltr" id="setting-card-type" placeholder="" pattern="" class="form-control" type="text"/>
+                                  <label class="form-label" for="setting-new-card-type">نوع کارت (اختیاری)</label>
+                                  <input id="setting-new-card-type" v-model="newCreditCard.type" placeholder="سپهر کارت" class="form-control" type="text"/>
                                 </div>
                                 <div class="mb-1">
-                                  <button class="btn btn-primary d-block w-100 mt-5 text-light" type="button">ذخیره اطلاعات</button>
+                                  <button class="btn btn-primary d-block w-100 mt-5 text-light" type="submit" :disabled="loading">ذخیره اطلاعات</button>
                                 </div>
                               </div>
                             </form>
@@ -405,30 +405,10 @@
                                 وبسایت
                               </h5>
                             </div>
-                            <div class="form-check form-switch border-bottom mb-2">
+<!--                            <div class="form-check form-switch border-bottom mb-2">
                               <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
                               <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان شغل ها به ایمیل</label>
-                            </div>
-                            <div class="form-check form-switch border-bottom mb-2">
-                              <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
-                              <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان شغل ها به ایمیل</label>
-                            </div>
-                            <div class="form-check form-switch border-bottom mb-2">
-                              <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
-                              <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان شغل ها به ایمیل</label>
-                            </div>
-                            <div class="form-check form-switch border-bottom mb-2">
-                              <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
-                              <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان شغل ها به ایمیل</label>
-                            </div>
-                            <div class="form-check form-switch border-bottom mb-2">
-                              <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
-                              <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان شغل ها به ایمیل</label>
-                            </div>
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
-                              <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان پرداخت ها به ایمیل</label>
-                            </div>
+                            </div>-->
                           </div>
                           <div class="col-12 border rounded px-4 pb-2 py-4 mb-3">
                             <div class="mb-4">
@@ -436,14 +416,10 @@
                                 ایمیل
                               </h5>
                             </div>
-                            <div class="form-check form-switch border-bottom mb-2">
+<!--                            <div class="form-check form-switch border-bottom mb-2">
                               <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
                               <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان شغل ها به ایمیل</label>
-                            </div>
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
-                              <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان پرداخت ها به ایمیل</label>
-                            </div>
+                            </div>-->
                           </div>
                           <div class="col-12 border rounded px-4 pb-2 py-4 mb-3">
                             <div class="mb-4">
@@ -451,14 +427,10 @@
                                 تلفن همراه
                               </h5>
                             </div>
-                            <div class="form-check form-switch border-bottom mb-2">
-                              <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
-                              <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان شغل ها به ایمیل</label>
-                            </div>
-                            <div class="form-check form-switch">
+<!--                            <div class="form-check form-switch">
                               <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked="" />
                               <label class="form-check-label" for="flexSwitchCheckChecked">ارسال اعلان پرداخت ها به ایمیل</label>
-                            </div>
+                            </div>-->
                           </div>
                         </div>
                       </div>
@@ -564,7 +536,7 @@
 
 <script>
 import ContentLayout from "@/components/layouts/ContentLayout.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   name: "SettingPage",
@@ -591,6 +563,19 @@ export default {
       newEmail: "",
       newDisplayName: "",
       newPhoneNumber: "",
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
+      newCreditCard: {
+        cardNumber: "",
+        ownerName: "",
+        expiredMonth: "",
+        expiredYear: "",
+        type: "",
+        bank: "",
+        iban: ""
+      },
+      creditCard: {},
     };
   },
   watch: {
@@ -603,6 +588,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(["loading"]),
     ...mapGetters(["username", "displayName", "pictureHref", "email", "phoneNumber", "confirmedPhone", "confirmedEmail", "creditCardInfo", "isCreditCardPresent"]),
   },
   methods: {
@@ -622,7 +608,21 @@ export default {
       this.editPhone = false;
       await this.updatePhoneNumber(this.newPhoneNumber);
     },
-    ...mapActions(["getUserInfo", "updateUsername", "updateEmail", "updateDisplayName", "updatePhoneNumber", "getCreditCardFromApi"]),
+    async changePassword() {
+      await this.updatePassword({
+        "currentPassword": this.currentPassword,
+        "newPassword": this.newPassword,
+        "confirmNewPassword": this.confirmNewPassword
+      });
+    },
+    async changeCreditCard() {
+      await this.saveCreditCard(this.creditCard);
+    },
+    async addNewCreditCard() {
+      this.creditCard = {...this.newCreditCard, confirmed: false, payable: false};
+      await this.saveCreditCard(this.newCreditCard);
+    },
+    ...mapActions(["getUserInfo", "updateUsername", "updateEmail", "updateDisplayName", "updatePhoneNumber", "updatePassword", "getCreditCardFromApi", "saveCreditCard"]),
   },
   async created() {
     await this.getUserInfo();
@@ -631,6 +631,7 @@ export default {
     this.newDisplayName = this.displayName;
     this.newPhoneNumber = this.phoneNumber;
     await this.getCreditCardFromApi();
+    this.creditCard = this.creditCardInfo;
   },
 }
 </script>

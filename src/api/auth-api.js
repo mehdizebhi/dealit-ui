@@ -1,10 +1,7 @@
 import dealitApi from "@/api/dealit-api";
 import {getCookie} from "@/util/cookie-helper";
-import {useStore} from "vuex";
-import {handleError} from "@/util/api-error-handler";
 
 export function signupApi(username, password, confirmPassword, email, displayName, phoneNumber, account) {
-    const store = useStore();
     return dealitApi.post(
         "auth/signup", {
             username,
@@ -19,13 +16,11 @@ export function signupApi(username, password, confirmPassword, email, displayNam
             return response.data
         })
         .catch((error) => {
-            handleError(error, store);
             throw error;
         });
 }
 
 export async function loginApi(username, password) {
-    const store = useStore();
     return dealitApi
         .post("auth/token", {
             username,
@@ -35,13 +30,11 @@ export async function loginApi(username, password) {
             return response.data;
         })
         .catch((error) => {
-            handleError(error, store);
             throw error;
         });
 }
 
 export function logoutApi() {
-    const store = useStore();
     return dealitApi
         .post("auth/logout", {}, {
             headers: {
@@ -49,13 +42,11 @@ export function logoutApi() {
             }
         })
         .catch((error) => {
-            handleError(error, store);
             throw error;
         });
 }
 
 export function sendOTPApi() {
-    const store = useStore();
     return dealitApi
         .post("auth/otp", {}, {
             headers: {
@@ -66,7 +57,6 @@ export function sendOTPApi() {
             return response.data;
         })
         .catch((error) => {
-            handleError(error, store);
             throw error;
         });
 }
@@ -82,7 +72,6 @@ export function verifyOTPApi(code) {
             return response.data;
         })
         .catch((error) => {
-            console.log("[Verify OTP API] - Something wrong in verifying otp code.");
             throw error;
         });
 }

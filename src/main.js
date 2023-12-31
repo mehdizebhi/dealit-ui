@@ -54,6 +54,7 @@ app.use(PrimeVue, {
 });
 
 // Use Vuelidate to Validation
+// Vue.use(Vuelidate);
 
 // Vuex Config and Usage
 app.use(store);

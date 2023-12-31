@@ -1,4 +1,8 @@
-import {fetchUserInfo, updateUsernameApi, updateDisplayNameApi, updateEmailApi, updatePhoneNumberApi} from "@/api/user-api";
+import {fetchUserInfo, updateUsernameApi, updateDisplayNameApi, updateEmailApi, updatePhoneNumberApi, updatePasswordApi} from "@/api/user-api";
+import {handleError} from "@/util/api-error-handler";
+import {signupApi} from "@/api/auth-api";
+import {setAuthenticationCookies} from "@/util/cookie-helper";
+import {Exception} from "sass";
 
 const state = {
     info: {
@@ -60,41 +64,98 @@ const actions = {
         commit('load');
         await fetchUserInfo().then((response) => {
             commit('setUserInfo', response);
-        }).catch(() => {});
-        commit('unload');
+        }).catch((error) => {
+            handleError(error, commit, () => {
+                commit('setSnackbar', {text: 'اطلاعات یافت نشد!', type: 'danger'});
+            })
+        }).finally(() => {
+            commit('unload');
+        });
     },
     async updateUsername({commit}, username) {
         commit('load');
         await updateUsernameApi(username).then(() => {
             commit('updateUsername', username);
-            commit('setSnackbar', "نام کاربری شما با موفقیت تغییر کرد.");
-        }).catch(() => {})
-        commit('unload');
+            commit('setSnackbar', {text: 'نام کاربری شما با موفقیت تغییر کرد.', type: 'success'});
+        }).catch((error) => {
+            handleError(error, commit, () => {
+                commit('setSnackbar', {text: 'این نام کاربری دردسترس نیست یا قبلا توسط فرد دیگری استفاده شده است.', type: 'danger'});
+            })
+        }).finally(() => {
+            commit('unload');
+        });
     },
     async updateEmail({commit}, email) {
         commit('load');
         await updateEmailApi(email).then(() => {
             commit('updateEmail', email);
-            commit('setSnackbar', "ایمیل شما با موفقیت تغییر کرد.");
-        }).catch(() => {})
-        commit('unload');
+            commit('setSnackbar', {text: 'ایمیل شما با موفقیت تغییر کرد.', type: 'success'});
+        }).catch((error) => {
+            handleError(error, commit, () => {
+                commit('setSnackbar', {text: 'این ایمیل قبلا توسط فرد دیگری استفاده شده است.', type: 'danger'});
+            })
+        }).finally(() => {
+            commit('unload');
+        });
     },
     async updateDisplayName({commit}, displayName) {
         commit('load');
         await updateDisplayNameApi(displayName).then(() => {
             commit('updateDisplayName', displayName);
-            commit('setSnackbar', "نام نمایشی شما با موفقیت تغییر کرد.");
-        }).catch(() => {})
-        commit('unload');
+            commit('setSnackbar', {text: 'نام نمایشی شما با موفقیت تغییر کرد.', type: 'success'});
+        }).catch((error) => {
+            handleError(error, commit, () => {
+                commit('setSnackbar', {text: 'نام نمایشی وارد شده نامعتبر است. لطفا نام دیگری انتخاب کنید.', type: 'danger'});
+            })
+        }).finally(() => {
+            commit('unload');
+        });
     },
     async updatePhoneNumber({commit}, phoneNumber) {
         commit('load');
         await updatePhoneNumberApi(phoneNumber).then(() => {
             commit('updatePhoneNumber', phoneNumber);
-            commit('setSnackbar', "شماره همراه شما با موفقیت تغییر کرد.");
-        }).catch(() => {})
-        commit('unload');
-    }
+            commit('setSnackbar', {text: 'شماره همراه شما با موفقیت تغییر کرد.', type: 'success'});
+        }).catch((error) => {
+            handleError(error, commit, () => {
+                commit('setSnackbar', {text: 'این شماره همراه دردسترس نیست لطفا شماره دیگری وارد کنید.', type: 'danger'});
+            })
+        }).finally(() => {
+            commit('unload');
+        });
+    },
+    async updatePassword({commit}, updatePasswordForm) {
+        commit('load');
+        await updatePasswordApi(updatePasswordForm.currentPassword, updatePasswordForm.newPassword, updatePasswordForm.confirmNewPassword)
+            .then(() => {
+                commit('setSnackbar', {text: 'رمز عبور با موفقیت تغییر کرد', type: 'success'});
+            }).catch((error) => {
+                handleError(error, commit, () => {
+                    commit('setSnackbar', {text: 'رمز عبور یا تکرار آن اشتباه است.', type: 'danger'});
+                })
+            }).finally(() => {
+                commit('unload');
+            });
+    },
+    async signup({commit}, user) {
+        if (user.password !== user.confirmPassword){
+            commit('setSnackbar', {text: 'رمز عبور و تکرار آن یکسان نیست!', type: 'danger'});
+            throw new Exception();
+        }
+        commit('load');
+        await signupApi(user.username, user.password, user.confirmPassword, user.email, user.displayName, user.phoneNumber, user.account)
+            .then((signedInUser) => {
+                setAuthenticationCookies(signedInUser.token);
+                commit('setSnackbar', {text: 'ثبت نام با موفقیت انجام شد.', type: 'success'});
+            }).catch((error) => {
+                handleError(error, commit, () => {
+                    commit('setSnackbar', {text: 'نام کاربری یا ایمیل وارد شده توسط فرد دیگری استفاده شده است.', type: 'danger'});
+                });
+                throw error;
+            }).finally(() => {
+                commit('unload');
+            });
+    },
 };
 
 const mutations = {

@@ -10,6 +10,7 @@ const store = createStore(Store,{
             loading: false,
             loadingCount: 0,
             snackbar: false,
+            snackbarType: '',
             snackbarText: '',
         }
     },
@@ -25,9 +26,10 @@ const store = createStore(Store,{
                 state.loadingCount = 0;
             }
         },
-        setSnackbar(state, text) {
+        setSnackbar(state, data) {
             state.snackbar = true;
-            state.snackbarText = text;
+            state.snackbarText = data.text;
+            state.snackbarType = data.type ? data.type : 'grey-darken-4';
         },
         closeSnackbar(state) {
             state.snackbar = false;
