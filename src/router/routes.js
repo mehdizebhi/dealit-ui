@@ -25,7 +25,7 @@ import FreelancerStatsPage from "@/views/freelancer/FreelancerStatsPage.vue";
 import ProfileSettingPage from "@/views/freelancer/ProfileSettingPage.vue";
 import YourContractsPage from "@/views/freelancer/YourContractsPage.vue";
 import YourJobsPage from "@/views/freelancer/YourJobsPage.vue";
-import SubmitJobPage from "@/views/job/SubmitJobPage.vue";
+// import SubmitJobPage from "@/views/job/SubmitJobPage.vue";
 import StepperSubmitJobPage from "@/views/job/StepperSubmitJobPage.vue";
 import ProposalDetailsPage from "@/views/freelancer/ProposalDetailsPage.vue";
 
@@ -79,34 +79,82 @@ const routes = [
     {path: "/verify-phone", name: "verify-phone", component: VerifyPhoneNumberPage, meta: {requiresAuth: true}},
     {path: "/verify-email", name: "verify-email", component: VerifyEmailPage, meta: {requiresAuth: true}},
 
-    {path: "/jobs", name: "jobs", component: Jobs, meta: {requiresAuth: true}},
-    {path: "/chat", name: "chat", component: Chat, meta: {requiresAuth: true}},
+
     {path: "/wallet", name: "wallet", component: Wallet, meta: {requiresAuth: true}},
-    {path: "/jobs/:id", name: "jobAdDetails", component: JobAdDetails, props: true, meta: {requiresAuth: true}},
-    {path: "/contracts/:id", name: "contract-details", component: ContractDetailsPage, props: true, meta: {requiresAuth: true}},
+    {path: "/change-profile", name: "changeProfile", component: ProfileSettingPage, meta: {requiresAuth: true}},
+    {path: "/setting", name: "setting", component: SettingPage, meta: {requiresAuth: true}},
+    {
+        path: "/jobs",
+        name: "jobs",
+        component: Jobs,
+        meta: {requiresAuth: true},
+        children: [
+            {path: ":id", name: "jobAdDetails", component: JobAdDetails, props: true},
+        ]
+    },
+    {
+        path: "/chat",
+        name: "chat",
+        component: Chat,
+        meta: {requiresAuth: true},
+        children: []
+    },
+
+    {
+        path: "/freelancer",
+        meta: {requiresAuth: true, requiresFreelancer: true, requiresClient: false},
+        children: [
+            {path: "profile", name: "profile", component: ProfilePage},
+            {path: "saved", name: "saved", component: SavedJobPage},
+            {path: "stats", name: "stats", component: FreelancerStatsPage},
+            {path: "jobs", name: "your-jobs", component: YourJobsPage},
+            {path: "contracts", name: "your-contracts", component: YourContractsPage},
+            {path: "contracts/:id", name: "freelancer-contract-details", component: ContractDetailsPage, props: true},
+            {path: "proposals", name: "proposals", component: ProposalsPage},
+            {path: "proposals/:id", name: "proposals-details", component: ProposalDetailsPage},
+            {path: "submit/:adId", name: "submit", component: StepperSubmitJobPage},
+        ]
+    },
+
+    {
+        path: "/client",
+        meta: {requiresAuth: true, requiresFreelancer: false, requiresClient: true},
+        children: [
+            {path: "new", name: "newJob", component: CreateNewJobAdPage},
+            {path: "stats", name: "client-stats", component: ClientStatsPage},
+            {path: "projects", name: "project-space", component: ProjectsPage},
+            {path: "positions", name: "job-positions", component: JobsPage},
+            {path: "contracts", name: "client-contracts", component: ContractsPage},
+            {path: "contracts/:id", name: "client-contract-details", component: ContractDetailsPage, props: true},
+            {path: "employment-history", name: "employment-history", component: EmploymentHistoryPage},
+            {path: "ads", name: "job-ads", component: YourJobAdPage},
+            {path: "ads/:id", name: "job-ad-details", component: ClientJobAdDetailsPage},
+        ]
+    },
+
+/*    {path: "/contracts/:id", name: "contract-details", component: ContractDetailsPage, props: true, meta: {requiresAuth: true}},
     {path: "/profile", name: "profile", component: ProfilePage, meta: {requiresAuth: true}},
     {path: "/saved", name: "saved", component: SavedJobPage, meta: {requiresAuth: true}},
     {path: "/proposals", name: "proposals", component: ProposalsPage, meta: {requiresAuth: true}},
     {path: "/proposals/:id", name: "proposals-details", component: ProposalDetailsPage, meta: {requiresAuth: true}},
-    {path: "/freelancer/stats", name: "stats", component: FreelancerStatsPage, meta: {requiresAuth: true}},
+    {path: "/freelancer/stats", name: "stats", component: FreelancerStatsPage, meta: {requiresAuth: true}},*/
 
-    {path: "/change-profile", name: "changeProfile", component: ProfileSettingPage, meta: {requiresAuth: true}},
-    {path: "/new", name: "newJob", component: CreateNewJobAdPage, meta: {requiresAuth: true}},
-    {path: "/freelancer/contracts", name: "your-contracts", component: YourContractsPage, meta: {requiresAuth: true}},
-    {path: "/freelancer/jobs", name: "your-jobs", component: YourJobsPage, meta: {requiresAuth: true}},
-    {path: "/submit2", name: "submit2", component: SubmitJobPage, meta: {requiresAuth: true}},
-    {path: "/submit", name: "submit", component: StepperSubmitJobPage, meta: {requiresAuth: true}},
+    /*    {path: "/freelancer/contracts", name: "your-contracts", component: YourContractsPage, meta: {requiresAuth: true}},
+        {path: "/freelancer/jobs", name: "your-jobs", component: YourJobsPage, meta: {requiresAuth: true}},
+        {path: "/submit2", name: "submit2", component: SubmitJobPage, meta: {requiresAuth: true}},
+        {path: "/submit", name: "submit", component: StepperSubmitJobPage, meta: {requiresAuth: true}},
+        */
+    /*{path: "/new", name: "newJob", component: CreateNewJobAdPage, meta: {requiresAuth: true}},
     {path: "/client/stats", name: "client-stats", component: ClientStatsPage, meta: {requiresAuth: true}},
     {path: "/client/projects", name: "project-space", component: ProjectsPage, meta: {requiresAuth: true}},
     {path: "/client/positions", name: "job-positions", component: JobsPage, meta: {requiresAuth: true}},
     {path: "/client/contracts", name: "client-contracts", component: ContractsPage, meta: {requiresAuth: true}},
     {path: "/client/employment-history", name: "employment-history", component: EmploymentHistoryPage, meta: {requiresAuth: true}},
     {path: "/client/ads", name: "job-ads", component: YourJobAdPage, meta: {requiresAuth: true}},
-    {path: "/client/jobs/:id", name: "job-ad-details", component: ClientJobAdDetailsPage, meta: {requiresAuth: true}},
+    {path: "/client/jobs/:id", name: "job-ad-details", component: ClientJobAdDetailsPage, meta: {requiresAuth: true}},*/
 
     {path: "/report/transactions", name: "transactions", component: TransactionHistoryPage, meta: {requiresAuth: true}},
     {path: "/report/connections", name: "connections-history", component: ConnectionHistoryPage, meta: {requiresAuth: true}},
-    {path: "/setting", name: "setting", component: SettingPage, meta: {requiresAuth: true}},
 
     {path: "/app/calendar", name: "app-calendar", component: CalendarPage, meta: {requiresAuth: true}},
 
