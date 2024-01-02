@@ -45,6 +45,7 @@ import SettingPage from "@/views/account/SettingPage.vue";
 import CalendarPage from "@/views/app/CalendarPage.vue";
 
 import NotFoundPage from "@/views/error/NotFoundPage.vue";
+import {extractClaim} from "@/util/jwt-helper";
 
 const routes = [
     {
@@ -113,7 +114,13 @@ const routes = [
             {path: "proposals", name: "proposals", component: ProposalsPage},
             {path: "proposals/:id", name: "proposals-details", component: ProposalDetailsPage},
             {path: "submit/:adId", name: "submit", component: StepperSubmitJobPage},
-        ]
+        ],
+        beforeEnter: () => {
+            const token = getAccessTokenCookie();
+            if (!extractClaim(token, "isFreelancer")) {
+                return {path: '/404'};
+            }
+        }
     },
 
     {
@@ -129,7 +136,13 @@ const routes = [
             {path: "employment-history", name: "employment-history", component: EmploymentHistoryPage},
             {path: "ads", name: "job-ads", component: YourJobAdPage},
             {path: "ads/:id", name: "job-ad-details", component: ClientJobAdDetailsPage},
-        ]
+        ],
+        beforeEnter: () => {
+            const token = getAccessTokenCookie();
+            if (!extractClaim(token, "isClient")) {
+                return {path: '/404'};
+            }
+        }
     },
 
 /*    {path: "/contracts/:id", name: "contract-details", component: ContractDetailsPage, props: true, meta: {requiresAuth: true}},
