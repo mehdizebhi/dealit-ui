@@ -117,6 +117,8 @@ export default {
         this.passwordType = "password";
       }
     }
+  },
+  mounted() {
   }
 };
 </script>

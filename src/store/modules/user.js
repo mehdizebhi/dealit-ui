@@ -18,6 +18,7 @@ const state = {
         createdAt: 0,
         updatedAt: 0,
     },
+    activities: [],
 };
 
 const getters = {
@@ -56,6 +57,9 @@ const getters = {
     },
     isAuthenticate(state) {
         return state.accessToken != null;
+    },
+    activities(state) {
+        return state.activities;
     }
 };
 
@@ -156,6 +160,9 @@ const actions = {
                 commit('unload');
             });
     },
+    /*async getActivitiesFromApi({commit}, page) {
+        commit('load');
+    }*/
 };
 
 const mutations = {

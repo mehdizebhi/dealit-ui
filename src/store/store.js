@@ -1,7 +1,10 @@
 import { Store } from 'vuex';
 import { createStore } from 'vuex-extensions';
-import user from './modules/user';
-import wallet from './modules/wallet';
+import user from '@/store/modules/user';
+import wallet from '@/store/modules/wallet';
+import chat from "@/store/modules/chat";
+import freelancerAccount from "@/store/modules/freelancer-account";
+import clientAccount from "@/store/modules/client-account";
 
 // Create a new store instance.
 const store = createStore(Store,{
@@ -12,6 +15,7 @@ const store = createStore(Store,{
             snackbar: false,
             snackbarType: '',
             snackbarText: '',
+            snackbarTimeout: 5000,
         }
     },
     mutations: {
@@ -30,6 +34,10 @@ const store = createStore(Store,{
             state.snackbar = true;
             state.snackbarText = data.text;
             state.snackbarType = data.type ? data.type : 'grey-darken-4';
+            /*setTimeout(() => {
+                state.snackbar = false;
+                state.snackbarText = '';
+            }, state.snackbarTimeout);*/
         },
         closeSnackbar(state) {
             state.snackbar = false;
@@ -38,7 +46,10 @@ const store = createStore(Store,{
     },
     modules: {
         user,
-        wallet
+        wallet,
+        chat,
+        freelancerAccount,
+        clientAccount
     }
 });
 

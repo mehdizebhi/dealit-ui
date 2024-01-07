@@ -3,7 +3,7 @@ export function convertToPersianNumber(englishNumber) {
     return String(englishNumber).replace(/\d/g, (digit) => persianDigits[digit]);
 }
 
-function formatNumberToPrice(number) {
+export function formatNumberToPrice(number) {
     // Use toLocaleString to add commas for thousands separators
     return Number(number).toLocaleString('en-US', {
         minimumFractionDigits: 2, // Ensures that there are always two decimal places

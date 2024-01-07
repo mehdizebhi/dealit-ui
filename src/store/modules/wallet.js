@@ -1,4 +1,5 @@
 import {fetchCreditCardDetailsApi, saveCreditCardDetailsApi} from "@/api/wallet-api";
+import {handleError} from "@/util/api-error-handler";
 
 const state = {
     balance: 0,
@@ -9,6 +10,11 @@ const state = {
     assets: [],
     totalIncome: 0,
     totalOutcome: 0,
+    info: {
+        newIncomeTransactions: 0,
+        newWithdrawConfirmation: 0,
+        transactionRequests: 0,
+    }
 };
 
 const getters = {
@@ -20,6 +26,12 @@ const getters = {
             return state.creditCard;
         }
         return null;
+    },
+    walletInfo(state) {
+        return state.info;
+    },
+    newWithdrawConfirmation(state) {
+        return state.info.newWithdrawConfirmation;
     }
 };
 
@@ -28,8 +40,13 @@ const actions = {
         commit('load');
         await fetchCreditCardDetailsApi().then((creditCard) => {
             commit('setCreditCard', creditCard);
-        }).catch(() => {})
-        commit('unload');
+        }).catch((error) => {
+            handleError(error, commit, () => {
+                commit('setSnackbar', {text: 'اطلاعات یافت نشد!', type: 'danger'});
+            })
+        }).finally(() => {
+            commit('unload');
+        });
     },
     async saveCreditCard({commit}, creditCard) {
         commit('load');
@@ -43,9 +60,13 @@ const actions = {
             commit('setCreditCard', {...creditCard, confirmed: false, payable: false});
             commit('setSnackbar', {text: 'کارت اعتباری برای تاییدیه، ارسال شد.', type: 'success'}
             );
-        }).catch(() => {
-        })
-        commit('unload');
+        }).catch((error) => {
+            handleError(error, commit, () => {
+                commit('setSnackbar', {text: 'اطلاعات وارد شده صحیح نیست! لطفا از صحت اطلاعات بانکی خود اطمینان حاصل فرمایید.', type: 'danger'});
+            })
+        }).finally(() => {
+            commit('unload');
+        });
     }
 };
 

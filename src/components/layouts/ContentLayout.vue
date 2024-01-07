@@ -15,7 +15,7 @@
 
     <!--Start Content Divs-->
     <slot name="content"></slot>
-    <v-snackbar :color="snackbarType" v-model="snackbar" :timeout="5000">
+    <v-snackbar :color="snackbarType" v-model="snackbar" :timeout="snackbarTimeout">
       {{ snackbarText }}
       <template v-slot:actions>
         <v-btn
@@ -80,7 +80,7 @@ export default {
       return this.$store.state.loading;
     },
     ...mapGetters(["confirmedEmail", "confirmedPhone", "isUserPresent"]),
-    ...mapState(["snackbar", "snackbarType", "snackbarText"])
+    ...mapState(["snackbar", "snackbarType", "snackbarText", "snackbarTimeout"])
   },
   mounted() {
     this.updateAlert(this.isUserPresent);

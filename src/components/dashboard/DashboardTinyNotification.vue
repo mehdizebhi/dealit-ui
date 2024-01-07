@@ -13,11 +13,11 @@
         </div>
       </div>
       <div class="col-auto d-flex align-items-center">
-        <a class="alert-link fs--1 fw-medium" :href="link"
+        <router-link class="alert-link fs--1 fw-medium" :to="{path: link}"
         >{{ linkTitle }}<i
             class="fas fa-chevron-left ms-1 fs--2"
         ></i
-        ></a>
+        ></router-link>
       </div>
     </div>
   </li>

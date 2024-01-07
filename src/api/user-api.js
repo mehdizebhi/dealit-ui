@@ -86,3 +86,14 @@ export async function updatePasswordApi(currentPassword, newPassword, confirmNew
             throw error;
         });
 }
+
+export async function getActivitiesApi(page, size) {
+    return dealitApi.get(`/users/activities?page=${page}&size=${size}`, {
+        headers: {
+            Authorization: 'Bearer ' + getAccessTokenCookie()
+        }
+    }).then((response) => {response.data.content})
+        .catch((error) => {
+            throw error;
+        });
+}
