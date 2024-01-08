@@ -1,6 +1,6 @@
 import {fetchUserInfo, updateUsernameApi, updateDisplayNameApi, updateEmailApi, updatePhoneNumberApi, updatePasswordApi} from "@/api/user-api";
 import {handleError} from "@/util/api-error-handler";
-import {signupApi, loginApi} from "@/api/auth-api";
+import {signupApi, loginApi, forgetPasswordApi} from "@/api/auth-api";
 import {setAuthenticationCookies, getAccessTokenCookie} from "@/util/cookie-helper";
 import {Exception} from "sass";
 import {extractClaim} from "@/util/jwt-helper";
@@ -179,6 +179,22 @@ const actions = {
         }).finally(() => {
             commit('unload');
         });
+    },
+    async forgetPassword({commit}, email) {
+        commit('load');
+        await forgetPasswordApi(email)
+            .then(() => {
+                commit('setSnackbar', {text: 'یک لینک جهت تغییر پسورد به ایمیل شما ارسال شد. در صورت عدم دریافت بخش اسپم ایمیل خود را چک کنید.', type: 'success'});
+            }).catch((error) => {
+                const { status } = error.response;
+                if (status === 404) {
+                    commit('setSnackbar', {text: 'کاربری با این ایمیل یافت نشد!', type: 'danger'});
+                } else {
+                    commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                }
+            }).finally(() => {
+                commit('unload');
+            });
     }
     /*async getActivitiesFromApi({commit}, page) {
         commit('load');

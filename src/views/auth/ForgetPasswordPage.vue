@@ -1,9 +1,7 @@
 <template>
-  <!-- ===============================================-->
-  <!--    Main Content-->
-  <!-- ===============================================-->
-  <main class="main" id="top">
-    <div class="container" data-layout="container">
+  <MainLayout>
+    <template #container>
+      <div class="container" data-layout="container">
       <div class="row flex-center min-vh-100 py-6 text-center">
         <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
           <a class="d-flex flex-center mb-4" href="/">
@@ -13,11 +11,14 @@
             <div class="card-body p-4 p-sm-5">
               <h5 class="mb-0">رمز عبور خود را فراموش کردید؟</h5>
               <small>ایمیل خود را وارد کنید و ما یک لینک برای تنظیم مجدد ارسال میکنیم.</small>
-              <form class="my-4 needs-validation" @submit.prevent="onResetPassword" novalidate="">
-                <input dir="ltr" id="email" class="form-control" type="email" placeholder="example@email.com" autocomplete="on" required="" />
+              <form class="my-4 needs-validation" @submit.prevent="onResetPassword">
+                <input dir="ltr" id="email" class="form-control" type="email" v-model="email" placeholder="example@email.com" autocomplete="on" required="" />
                 <div class="invalid-feedback">ایمیل وارد شده نامعتبر است</div>
                 <div class="mb-3"></div>
-                <button class="btn btn-primary d-block w-100 mt-3 text-light" type="submit" name="submit">ارسال ایمیل</button>
+                <button class="btn btn-primary d-block w-100 mt-3 text-light" type="submit" name="submit" :disabled="loading">
+                  ارسال ایمیل
+                  <v-progress-circular v-show="loading" :width="3" :size="20" indeterminate></v-progress-circular>
+                </button>
               </form>
               <a class="fs--1 text-600" href="/login">
                 ورود به حساب کاربری
@@ -28,18 +29,32 @@
         </div>
       </div>
     </div>
-  </main><!-- ===============================================-->
-  <!--    End of Main Content-->
-  <!-- ===============================================-->
+    </template>
+  </MainLayout>
 </template>
 
 <script>
+import MainLayout from "@/components/layouts/MainLayout.vue";
+import {mapActions, mapState} from "vuex";
+
 export default {
   name: "ForgetPasswordPage",
+  components: {MainLayout},
+  data() {
+    return {
+      email: '',
+    };
+  },
   methods: {
-    onResetPassword() {
-
-    }
+    async onResetPassword() {
+      await this.forgetPassword(this.email)
+          .then(() => {})
+          .catch(() => {});
+    },
+    ...mapActions(["forgetPassword"]),
+  },
+  computed: {
+    ...mapState(["loading"]),
   }
 }
 </script>

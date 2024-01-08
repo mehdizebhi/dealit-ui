@@ -46,6 +46,17 @@ export function logoutApi() {
         });
 }
 
+export function forgetPasswordApi(email) {
+    return dealitApi
+        .post("auth/forget-password?email=" + email)
+        .then((response) => {
+            return response.data.message;
+        })
+        .catch((error) => {
+            throw error;
+        });
+}
+
 export function sendOTPApi() {
     return dealitApi
         .post("auth/otp", {}, {
