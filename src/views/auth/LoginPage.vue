@@ -62,7 +62,7 @@
 
 <script>
 import MainLayout from "@/components/layouts/MainLayout.vue";
-import {mapMutations, mapState, mapActions} from "vuex";
+import {mapState, mapActions} from "vuex";
 
 export default {
   name: "LoginPage",
@@ -87,7 +87,6 @@ export default {
     validate() {
       return this.username.length > 0 && this.password.length > 0;
     },
-    ...mapMutations(["closeSnackbar"]),
     ...mapActions(["login"]),
   },
   watch: {
@@ -102,7 +101,7 @@ export default {
   mounted() {
   },
   computed: {
-    ...mapState(["snackbar", "snackbarType", "snackbarText", "snackbarTimeout", "loading"]),
+    ...mapState(["loading"]),
   }
 };
 </script>

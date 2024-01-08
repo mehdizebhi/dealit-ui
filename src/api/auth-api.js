@@ -57,6 +57,31 @@ export function forgetPasswordApi(email) {
         });
 }
 
+export function checkResetPasswordTokenApi(token) {
+    return dealitApi
+        .get("auth/check-reset-password-token?token=" + token)
+        .then((response) => {
+            return response.data.message;
+        })
+        .catch((error) => {
+            throw error;
+        });
+}
+
+export function resetPasswordApi(password, confirmPassword, token){
+    return dealitApi
+        .post("auth/reset-password?token=" + token, {
+            "password" : password,
+            "confirmPassword": confirmPassword
+        })
+        .then((response) => {
+            return response.data.message;
+        })
+        .catch((error) => {
+            throw error;
+        });
+}
+
 export function sendOTPApi() {
     return dealitApi
         .post("auth/otp", {}, {
