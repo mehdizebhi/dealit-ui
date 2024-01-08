@@ -13,7 +13,7 @@ export function signupApi(username, password, confirmPassword, email, displayNam
             account
         })
         .then((response) => {
-            return response.data
+            return response.data.data
         })
         .catch((error) => {
             throw error;
@@ -27,7 +27,7 @@ export async function loginApi(username, password) {
             password
         })
         .then((response) => {
-            return response.data;
+            return response.data.data;
         })
         .catch((error) => {
             throw error;
@@ -54,7 +54,7 @@ export function sendOTPApi() {
             }
         })
         .then((response) => {
-            return response.data;
+            return response.data.data;
         })
         .catch((error) => {
             throw error;
@@ -69,7 +69,7 @@ export function verifyOTPApi(code) {
             }
         })
         .then((response) => {
-            return response.data;
+            return response.data.data;
         })
         .catch((error) => {
             throw error;

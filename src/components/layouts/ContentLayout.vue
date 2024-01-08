@@ -15,7 +15,7 @@
 
     <!--Start Content Divs-->
     <slot name="content"></slot>
-    <v-snackbar :color="snackbarType" v-model="snackbar" :timeout="snackbarTimeout">
+    <v-snackbar :color="snackbarType" v-model="$store.state.snackbar" :timeout="snackbarTimeout" timer="white">
       {{ snackbarText }}
       <template v-slot:actions>
         <v-btn

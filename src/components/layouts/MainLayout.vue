@@ -6,7 +6,7 @@
       <!--Start Main Divs-->
       <slot name="container"></slot>
       <!--End Main Divs-->
-      <v-snackbar :color="snackbarType" v-model="snackbar" :timeout="5000">
+      <v-snackbar :color="snackbarType" v-model="$store.state.snackbar" :timeout="snackbarTimeout" timer="white">
         {{ snackbarText }}
         <template v-slot:actions>
           <v-btn
@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     ...mapGetters(["confirmedEmail", "confirmedPhone", "isUserPresent"]),
-    ...mapState(["snackbar", "snackbarType", "snackbarText"])
+    ...mapState(["snackbar", "snackbarType", "snackbarText", "snackbarTimeout"])
   }
 }
 </script>

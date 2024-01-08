@@ -8,7 +8,7 @@ export async function fetchUserInfo() {
         }
     })
         .then((response) => {
-            return response.data;
+            return response.data.data;
         })
         .catch((error) => {
             throw error;
@@ -22,7 +22,7 @@ export async function updateUsernameApi(newUsername) {
         }
     })
         .then((response) => {
-            setAuthenticationCookies(response.data);
+            setAuthenticationCookies(response.data.data);
         })
         .catch((error) => {
             throw error;
@@ -36,7 +36,7 @@ export async function updateDisplayNameApi(newDisplayName) {
         }
     })
         .then((response) => {
-            setAuthenticationCookies(response.data);
+            setAuthenticationCookies(response.data.data);
         })
         .catch((error) => {
             throw error;
@@ -50,7 +50,7 @@ export async function updateEmailApi(newEmail) {
         }
     })
         .then((response) => {
-            setAuthenticationCookies(response.data);
+            setAuthenticationCookies(response.data.data);
         })
         .catch((error) => {
             throw error;
@@ -64,7 +64,7 @@ export async function updatePhoneNumberApi(newPhoneNumber) {
         }
     })
         .then((response) => {
-            setAuthenticationCookies(response.data);
+            setAuthenticationCookies(response.data.data);
         })
         .catch((error) => {
             throw error;
@@ -92,7 +92,7 @@ export async function getActivitiesApi(page, size) {
         headers: {
             Authorization: 'Bearer ' + getAccessTokenCookie()
         }
-    }).then((response) => {response.data.content})
+    }).then((response) => {response.data.data.content})
         .catch((error) => {
             throw error;
         });

@@ -1,8 +1,9 @@
 import {fetchUserInfo, updateUsernameApi, updateDisplayNameApi, updateEmailApi, updatePhoneNumberApi, updatePasswordApi} from "@/api/user-api";
 import {handleError} from "@/util/api-error-handler";
-import {signupApi} from "@/api/auth-api";
-import {setAuthenticationCookies} from "@/util/cookie-helper";
+import {signupApi, loginApi} from "@/api/auth-api";
+import {setAuthenticationCookies, getAccessTokenCookie} from "@/util/cookie-helper";
 import {Exception} from "sass";
+import {extractClaim} from "@/util/jwt-helper";
 
 const state = {
     info: {
@@ -49,11 +50,11 @@ const getters = {
     pictureHref(state) {
         return state.info.pictureHref;
     },
-    isFreelancer(state) {
-        return state.info.types.includes('FREELANCER');
+    isFreelancer() {
+        return extractClaim(getAccessTokenCookie(), "isFreelancer");
     },
-    isClient(state) {
-        return state.info.types.includes('CLIENT');
+    isClient() {
+        return extractClaim(getAccessTokenCookie(), "isClient");
     },
     isAuthenticate(state) {
         return state.accessToken != null;
@@ -160,6 +161,25 @@ const actions = {
                 commit('unload');
             });
     },
+    async login({commit}, credential) {
+        commit('load');
+        await loginApi(credential.username, credential.password)
+            .then((authToken) => {
+                setAuthenticationCookies(authToken);
+                commit('setSnackbar', {text: 'ورود با موفقیت انجام شد.', type: 'success'});
+            }).catch((error) => {
+            handleError(error, commit, () => {
+                const { status } = error.response;
+                if (status === 401) {
+                    commit('setSnackbar', {text: 'نام کاربری یا رمز عبور اشتباه است.', type: 'danger'});
+                } else {
+                    commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                }
+            });
+        }).finally(() => {
+            commit('unload');
+        });
+    }
     /*async getActivitiesFromApi({commit}, page) {
         commit('load');
     }*/
