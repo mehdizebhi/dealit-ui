@@ -92,7 +92,7 @@ export async function getActivitiesApi(page, size) {
         headers: {
             Authorization: 'Bearer ' + getAccessTokenCookie()
         }
-    }).then((response) => {response.data.data.content})
+    }).then((response) => {response.data.data})
         .catch((error) => {
             throw error;
         });

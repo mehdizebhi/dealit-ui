@@ -84,7 +84,12 @@ const actions = {
             commit('setSnackbar', {text: 'نام کاربری شما با موفقیت تغییر کرد.', type: 'success'});
         }).catch((error) => {
             handleError(error, commit, () => {
-                commit('setSnackbar', {text: 'این نام کاربری دردسترس نیست یا قبلا توسط فرد دیگری استفاده شده است.', type: 'danger'});
+                const { status } = error.response;
+                if (status === 406) {
+                    commit('setSnackbar', {text: 'این نام کاربری دردسترس نیست یا قبلا توسط فرد دیگری استفاده شده است.', type: 'danger'});
+                } else {
+                    commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                }
             })
         }).finally(() => {
             commit('unload');
@@ -97,7 +102,12 @@ const actions = {
             commit('setSnackbar', {text: 'ایمیل شما با موفقیت تغییر کرد.', type: 'success'});
         }).catch((error) => {
             handleError(error, commit, () => {
-                commit('setSnackbar', {text: 'این ایمیل قبلا توسط فرد دیگری استفاده شده است.', type: 'danger'});
+                const { status } = error.response;
+                if (status === 406) {
+                    commit('setSnackbar', {text: 'این ایمیل قبلا توسط فرد دیگری استفاده شده است.', type: 'danger'});
+                } else {
+                    commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                }
             })
         }).finally(() => {
             commit('unload');
@@ -123,7 +133,7 @@ const actions = {
             commit('setSnackbar', {text: 'شماره همراه شما با موفقیت تغییر کرد.', type: 'success'});
         }).catch((error) => {
             handleError(error, commit, () => {
-                commit('setSnackbar', {text: 'این شماره همراه دردسترس نیست لطفا شماره دیگری وارد کنید.', type: 'danger'});
+                commit('setSnackbar', {text: 'این شماره همراه غیرمجاز است لطفا شماره دیگری وارد کنید.', type: 'danger'});
             })
         }).finally(() => {
             commit('unload');
@@ -136,7 +146,14 @@ const actions = {
                 commit('setSnackbar', {text: 'رمز عبور با موفقیت تغییر کرد', type: 'success'});
             }).catch((error) => {
                 handleError(error, commit, () => {
-                    commit('setSnackbar', {text: 'رمز عبور یا تکرار آن اشتباه است.', type: 'danger'});
+                    const { status } = error.response;
+                    if (status === 404) {
+                        commit('setSnackbar', {text: 'رمز عبور وارد شده اشتباه است', type: 'danger'});
+                    } else if (status === 406) {
+                        commit('setSnackbar', {text: 'رمز عبور یا تکرار آن اشتباه است.', type: 'danger'});
+                    } else {
+                        commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                    }
                 })
             }).finally(() => {
                 commit('unload');
