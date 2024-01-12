@@ -318,7 +318,7 @@ const actions = {
         commit('load');
         await verifySmsOTPApi(code)
             .then(() => {
-                commit('confirmEmail');
+                commit('confirmPhone');
                 commit('setSnackbar', {text: 'شماره تلفن شما با موفقیت تایید شد', type: 'success'});
             })
             .catch((error) => {
@@ -343,7 +343,7 @@ const actions = {
         commit('load');
         await verifyEmailOTPApi(code)
             .then(() => {
-                commit('confirmPhone');
+                commit('confirmEmail');
                 commit('setSnackbar', {text: 'ایمیل شما با موفقیت تایید شد', type: 'success'});
             })
             .catch((error) => {
