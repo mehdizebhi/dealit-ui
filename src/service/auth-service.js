@@ -1,4 +1,4 @@
-import { signupApi, loginApi, logoutApi, sendOTPApi, verifyOTPApi } from "@/api/auth-api";
+import { signupApi, loginApi, logoutApi} from "@/api/auth-api";
 
 export function signup(user) {
     return signupApi(
@@ -23,16 +23,4 @@ export function login(username, password) {
 
 export function logout() {
     logoutApi();
-}
-
-export function sendOTP() {
-    return sendOTPApi().then((otp) => {
-        return otp;
-    })
-}
-
-export function verifyOTP(code) {
-    return verifyOTPApi(code).then((response) => {
-        return response;
-    })
 }

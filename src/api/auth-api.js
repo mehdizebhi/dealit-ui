@@ -81,33 +81,3 @@ export function resetPasswordApi(password, confirmPassword, token){
             throw error;
         });
 }
-
-export function sendOTPApi() {
-    return dealitApi
-        .post("auth/otp", {}, {
-            headers: {
-                Authorization: 'Bearer ' + getCookie("access_token")
-            }
-        })
-        .then((response) => {
-            return response.data.data;
-        })
-        .catch((error) => {
-            throw error;
-        });
-}
-
-export function verifyOTPApi(code) {
-    return dealitApi
-        .post("auth/verify-otp", {code}, {
-            headers: {
-                Authorization: 'Bearer ' + getCookie("access_token")
-            }
-        })
-        .then((response) => {
-            return response.data.data;
-        })
-        .catch((error) => {
-            throw error;
-        });
-}

@@ -1,4 +1,4 @@
-import {fetchUserInfo, updateUsernameApi, updateDisplayNameApi, updateEmailApi, updatePhoneNumberApi, updatePasswordApi} from "@/api/user-api";
+import {fetchUserInfo, updateUsernameApi, updateDisplayNameApi, updateEmailApi, updatePhoneNumberApi, updatePasswordApi, getActivitiesApi, sendSmsOTPApi, sendEmailOTPApi, verifyEmailOTPApi, verifySmsOTPApi} from "@/api/user-api";
 import {handleError} from "@/util/api-error-handler";
 import {signupApi, loginApi, forgetPasswordApi, checkResetPasswordTokenApi, resetPasswordApi} from "@/api/auth-api";
 import {setAuthenticationCookies, getAccessTokenCookie} from "@/util/cookie-helper";
@@ -50,11 +50,11 @@ const getters = {
     pictureHref(state) {
         return state.info.pictureHref;
     },
-    isFreelancer() {
-        return extractClaim(getAccessTokenCookie(), "isFreelancer");
+    isFreelancer(state) {
+        return state.info.types.includes('FREELANCER') || extractClaim(getAccessTokenCookie(), "isFreelancer");
     },
-    isClient() {
-        return extractClaim(getAccessTokenCookie(), "isClient");
+    isClient(state) {
+        return state.info.types.includes('CLIENT') || extractClaim(getAccessTokenCookie(), "isClient");
     },
     isAuthenticate(state) {
         return state.accessToken != null;
@@ -253,10 +253,117 @@ const actions = {
            }).finally(() => {
                commit('unload');
            });
-    }
-    /*async getActivitiesFromApi({commit}, page) {
+    },
+    async getActivitiesFromApi({commit}, data) {
         commit('load');
-    }*/
+        await getActivitiesApi(data.page, data.size)
+            .then((activities) => {
+                commit('setActivities', activities);
+            }).catch((error) => {
+                handleError(error, commit, () => {
+                    commit('setSnackbar', {text: 'فعالیت های اخیر یافت نشد', type: 'danger'});
+                });
+                throw error;
+            }).finally(() => {
+                commit('unload');
+            });
+    },
+    async sendSmsOTP({commit}) {
+        commit('load');
+        await sendSmsOTPApi()
+            .then(() => {
+                commit('setSnackbar', {text: 'کد به تلفن همراه شما ارسال شد', type: 'success'});
+            })
+            .catch((error) => {
+                handleError(error, commit, () => {
+                    const { status } = error.response;
+                    if (status === 400) {
+                        commit('setSnackbar', {text: 'شماره تلفن همراه قبلا تایید شده است', type: 'danger'});
+                    } else if (status === 406) {
+                        commit('setSnackbar', {text: 'مکانیزمی برای ارسال یافت نشد', type: 'danger'});
+                    } else if (status === 429) {
+                        commit('setSnackbar', {text: 'کد قبلا ارسال شده است لطفا بعد از 10 دقیقه مجدد تلاش کنید', type: 'danger'});
+                    } else {
+                        commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                    }
+                });
+            }).finally(() => {
+                commit('unload');
+            });
+    },
+    async sendEmailOTP({commit}) {
+        commit('load');
+        await sendEmailOTPApi()
+            .then(() => {
+                commit('setSnackbar', {text: 'کد به ایمیل شما ارسال شد (اسپم ایمیل را چک کنید)', type: 'success'});
+            })
+            .catch((error) => {
+                handleError(error, commit, () => {
+                    const { status } = error.response;
+                    if (status === 400) {
+                        commit('setSnackbar', {text: 'ایمیل قبلا تایید شده است', type: 'danger'});
+                    } else if (status === 406) {
+                        commit('setSnackbar', {text: 'مکانیزمی برای ارسال یافت نشد', type: 'danger'});
+                    } else if (status === 429) {
+                        commit('setSnackbar', {text: 'کد قبلا ارسال شده است لطفا بعد از 10 دقیقه مجدد تلاش کنید', type: 'danger'});
+                    } else {
+                        commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                    }
+                });
+            }).finally(() => {
+                commit('unload');
+            });
+    },
+    async verifySmsOTP({commit}, code) {
+        commit('load');
+        await verifySmsOTPApi(code)
+            .then(() => {
+                commit('confirmEmail');
+                commit('setSnackbar', {text: 'شماره تلفن شما با موفقیت تایید شد', type: 'success'});
+            })
+            .catch((error) => {
+                handleError(error, commit, () => {
+                    const { status } = error.response;
+                    if (status === 400) {
+                        commit('setSnackbar', {text: 'شماره تلفن شما قبلا تایید شده است', type: 'danger'});
+                    } else if (status === 404) {
+                        commit('setSnackbar', {text: 'کد اشتباه وارد شده است', type: 'danger'});
+                    } else if (status === 406) {
+                        commit('setSnackbar', {text: 'نوع کد شما غیر مجاز است', type: 'danger'});
+                    } else {
+                        commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                    }
+                });
+                throw error;
+            }).finally(() => {
+                commit('unload');
+            });
+    },
+    async verifyEmailOTP({commit}, code) {
+        commit('load');
+        await verifyEmailOTPApi(code)
+            .then(() => {
+                commit('confirmPhone');
+                commit('setSnackbar', {text: 'ایمیل شما با موفقیت تایید شد', type: 'success'});
+            })
+            .catch((error) => {
+                handleError(error, commit, () => {
+                    const { status } = error.response;
+                    if (status === 400) {
+                        commit('setSnackbar', {text: 'ایمیل قبلا تایید شده است', type: 'danger'});
+                    } else if (status === 404) {
+                        commit('setSnackbar', {text: 'کد اشتباه وارد شده است', type: 'danger'});
+                    } else if (status === 406) {
+                        commit('setSnackbar', {text: 'نوع کد شما غیر مجاز است', type: 'danger'});
+                    } else {
+                        commit('setSnackbar', {text: 'مشکلی در درخواست شما وجود دارد', type: 'danger'});
+                    }
+                });
+                throw error;
+            }).finally(() => {
+                commit('unload');
+            });
+    }
 };
 
 const mutations = {
@@ -277,6 +384,15 @@ const mutations = {
         state.info.phoneNumber = phoneNumber;
         state.info.confirmedPhone = false;
     },
+    setActivities(state, activities) {
+        state.activities = activities;
+    },
+    confirmEmail(state) {
+        state.info.confirmedEmail = true;
+    },
+    confirmPhone(state) {
+        state.info.confirmedPhone = true;
+    }
 };
 
 export default {

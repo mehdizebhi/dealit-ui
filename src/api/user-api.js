@@ -1,5 +1,5 @@
 import dealitApi from "@/api/dealit-api";
-import {getAccessTokenCookie, setAuthenticationCookies} from "@/util/cookie-helper";
+import {getAccessTokenCookie, getCookie, setAuthenticationCookies} from "@/util/cookie-helper";
 
 export async function fetchUserInfo() {
     return dealitApi.get('/users/info', {
@@ -92,7 +92,69 @@ export async function getActivitiesApi(page, size) {
         headers: {
             Authorization: 'Bearer ' + getAccessTokenCookie()
         }
-    }).then((response) => {response.data.data})
+    }).then((response) => {
+        return response.data.data;
+    })
+        .catch((error) => {
+            throw error;
+        });
+}
+
+export function sendSmsOTPApi() {
+    return dealitApi
+        .post("users/sms-otp", {}, {
+            headers: {
+                Authorization: 'Bearer ' + getCookie("access_token")
+            }
+        })
+        .then((response) => {
+            return response.data.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
+}
+
+export function verifySmsOTPApi(code) {
+    return dealitApi
+        .post("users/verify-sms-otp", {code}, {
+            headers: {
+                Authorization: 'Bearer ' + getCookie("access_token")
+            }
+        })
+        .then((response) => {
+            return response.data.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
+}
+
+export function sendEmailOTPApi() {
+    return dealitApi
+        .post("users/email-otp", {}, {
+            headers: {
+                Authorization: 'Bearer ' + getCookie("access_token")
+            }
+        })
+        .then((response) => {
+            return response.data.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
+}
+
+export function verifyEmailOTPApi(code) {
+    return dealitApi
+        .post("users/verify-email-otp", {code}, {
+            headers: {
+                Authorization: 'Bearer ' + getCookie("access_token")
+            }
+        })
+        .then((response) => {
+            return response.data.data;
+        })
         .catch((error) => {
             throw error;
         });
